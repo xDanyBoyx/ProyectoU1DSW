@@ -112,7 +112,7 @@ async function addUser({
 
     const docRef = doc(usersCollection, randomUUID());
     await setDoc(docRef, newUser);
-    
+
     return {
       id: docRef.id,
       mail: newUser.mail,
@@ -134,22 +134,34 @@ async function updateUser(userId, data) {
     const existingUser = await findById(userId);
     if (!existingUser) return null;
     const userRef = doc(usersCollection, userId);
-    const updatedData = {
-      mail: data.mail ?? existingUser.mail,
-      name: data.name ?? existingUser.name,
-      role: data.role ?? existingUser.role,
-      domicile: data.domicile ?? existingUser.domicile,
-      rfc: data.rfc ?? existingUser.rfc,
-      password: data.password ? await bcrypt.hash(data.password, 10) : existingUser.password
-    };
+
+    const updatedData = {};
+
+    if (data.mail !== undefined) updatedData.mail = data.mail;
+    if (data.name !== undefined) updatedData.name = data.name;
+    if (data.role !== undefined) updatedData.role = data.role;
+    if (data.domicile !== undefined) updatedData.domicile = data.domicile;
+    if (data.rfc !== undefined) updatedData.rfc = data.rfc;
+
+    // Manejar password solo si se proporciona
+    if (data.password) {
+      updatedData.password = await bcrypt.hash(data.password, 10);
+    }
+
+    // Verificar que hay campos para actualizar
+    if (Object.keys(updatedData).length === 0) {
+      return existingUser; // No hay cambios
+    }
+
     await updateDoc(userRef, updatedData);
+
     return {
       id: userId,
-      mail: updatedData.mail,
-      name: updatedData.name,
-      role: updatedData.role,
-      domicile: updatedData.domicile,
-      rfc: updatedData.rfc,
+      mail: updatedData.mail ?? existingUser.mail,
+      name: updatedData.name ?? existingUser.name,
+      role: updatedData.role ?? existingUser.role,
+      domicile: updatedData.domicile ?? existingUser.domicile,
+      rfc: updatedData.rfc ?? existingUser.rfc,
       billid: existingUser.billid
     };
   } catch (error) {

@@ -13,7 +13,6 @@ import {
   updateDoc,
   deleteDoc
 } from "firebase/firestore";
-import bcrypt from "bcryptjs";
 
 
 const productsCollection = collection(db, "products");
@@ -117,20 +116,33 @@ async function updateProduct(productId, data) {
     if (!existingProduct) return null;
 
     const productRef = doc(productsCollection, productId);
-    const updatedData = {
-      name: data.name ?? existingProduct.name,
-      brand: data.brand ?? existingProduct.brand,
-      stock: data.stock ?? existingProduct.stock,
-      price: data.price ?? existingProduct.price,
-      category: data.category ?? existingProduct.category,
-      urlimg: data.urlimg ?? existingProduct.urlimg
-    };
+    
+    // Crear objeto solo con los campos definidos
+    const updatedData = {};
+    
+    if (data.name !== undefined) updatedData.name = data.name;
+    if (data.brand !== undefined) updatedData.brand = data.brand;
+    if (data.stock !== undefined) updatedData.stock = data.stock;
+    if (data.price !== undefined) updatedData.price = data.price;
+    if (data.category !== undefined) updatedData.category = data.category;
+    if (data.urlimg !== undefined) updatedData.urlimg = data.urlimg;
+    
+    // Verificar que hay campos para actualizar
+    if (Object.keys(updatedData).length === 0) {
+      return existingProduct; // No hay cambios
+    }
 
     await updateDoc(productRef, updatedData);
+    
     return {
       id: productId,
       billid: existingProduct.billid,
-      ...updatedData
+      name: updatedData.name ?? existingProduct.name,
+      brand: updatedData.brand ?? existingProduct.brand,
+      stock: updatedData.stock ?? existingProduct.stock,
+      price: updatedData.price ?? existingProduct.price,
+      category: updatedData.category ?? existingProduct.category,
+      urlimg: updatedData.urlimg ?? existingProduct.urlimg
     };
   } catch (error) {
     console.error("Error en archivo product.model.js función updateProduct: ", error);
