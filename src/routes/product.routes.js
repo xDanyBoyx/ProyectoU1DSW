@@ -1,7 +1,7 @@
-//IMPORTAMOS EXPRESS, CONTROLADOR Y MIDDLEWARE DE AUTENTICACIÓN
-const express = require("express");
-const controller = require("../controllers/product.controller");
-const { authenticate } = require("../middleware/auth.middleware");
+//IMPORTAMOS EXPRESS, CONTROLADOR Y MIDDLEWARE DE AUTENTICACIÓN (ESM)
+import express from "express";
+import controller from "../controllers/product.controller.js";
+import { authenticate } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
@@ -12,5 +12,5 @@ router.post("/", authenticate, controller.add);
 router.put("/:id", authenticate, controller.update);
 router.delete("/:id", authenticate, controller.remove);
 
-// EXPORTAMOS EL ROUTER
-module.exports = router;
+// EXPORTAMOS EL ROUTER (ESM)
+export default router;
