@@ -1,10 +1,7 @@
-// services/facturapiService.js
 import { createRequire } from 'module';
-import dotenv from 'dotenv';
 
 const require = createRequire(import.meta.url);
 const Facturapi = require('facturapi').default;
-
 
 // ============= SINGLETON PATTERN =============
 
@@ -22,10 +19,6 @@ class FacturapiService {
     getFacturapi() {
         if (!this.facturapi) {
             const apiKey = process.env.TEST_SECRET_API_FACTURAPI;
-
-            if (!apiKey) {
-                throw new Error('TEST_SECRET_API_FACTURAPI no está configurado en las variables de entorno');
-            }
 
             this.facturapi = new Facturapi(apiKey);
             console.log('✅ Instancia de Facturapi inicializada');

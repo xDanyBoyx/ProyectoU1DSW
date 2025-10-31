@@ -30,6 +30,8 @@ async function findAll() {
         domicile: doc.data().domicile,
         role: doc.data().role,
         rfc: doc.data().rfc,
+        rf : doc.data().rf,
+        phone: doc.data().phone,
         //password: doc.data().password,
         id_facturapi: doc.data().id_facturapi,
       };
@@ -53,6 +55,8 @@ async function findById(userId) {
         domicile: snapshot.data().domicile,
         role: snapshot.data().role,
         rfc: snapshot.data().rfc,
+        rf : doc.data().rf,
+        phone: doc.data().phone,
         //password: snapshot.data().password,
         id_facturapi: snapshot.data().id_facturapi,
       }
@@ -191,7 +195,17 @@ async function deleteUser(userid) {
 async function filterUser(filter = {}) {
   try {
     const snapshot = await getDocs(usersCollection);
-    const docs = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+    const docs = snapshot.docs.map((d) => ({ 
+      id: d.id, 
+      mail: d.mail,
+      name: d.name,
+      role: d.role,
+      domicile: d.domicile,
+      rfc: d.rfc,
+      rf: d.rf, 
+      phone: d.phone, 
+      id_facturapi: d.id_facturapi 
+    }));
 
     let result = docs;
 
@@ -212,12 +226,24 @@ async function filterUser(filter = {}) {
 
     if (filter.domicile) {
       const q = String(filter.domicile).toLowerCase();
-      result = result.filter((u) => (u.domicile || "").toLowerCase().includes(q));
+      result = result.filter((u) =>
+        JSON.stringify(u.domicile || {}).toLowerCase().includes(q)
+      );
     }
 
     if (filter.rfc) {
       const q = String(filter.rfc).toLowerCase();
       result = result.filter((u) => (u.rfc || "").toLowerCase().includes(q));
+    }
+
+    if (filter.rf) {
+      const q = String(filter.rf).toLowerCase();
+      result = result.filter((u) => (u.rf || "").toLowerCase().includes(q));
+    }
+
+    if (filter.phone) {
+      const q = String(filter.phone).toLowerCase();
+      result = result.filter((u) => (u.phone || "").toLowerCase().includes(q));
     }
 
     return result;

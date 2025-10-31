@@ -40,17 +40,6 @@ async function register(req, res) {
       return res.status(500).json({ message: "Error al crear usuario" });
     }
 
-    console.log(name,
-      password,
-      mail,
-      role || "cliente", // puede haber usuarios tipo 'admin' || 'cliente'
-      domicile,
-      rfc,
-      rf,
-      phone,
-      customerFacturapi.id);
-    
-
     const newUser = await UserModel.addUser({
       name,
       password,
