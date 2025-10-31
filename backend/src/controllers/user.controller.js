@@ -1,26 +1,5 @@
-//IMPORTAMOS EL MODELO DE USUARIOS (ESM)
+import { validateUser, validateUserUpdate } from "../utils/validations.js";
 import UserModel from "../models/user.model.js";
-
-//FUNCIÓN DE VALIDACIONES
-// isNew: si true valida campos obligatorios para creación; si false valida sólo los campos presentes
-const validateUserData = (data, isNew = true) => {
-  const errors = {};
-
-  if ((isNew || data.name !== undefined) && (!data.name || typeof data.name !== "string" || /\d/.test(data.name))) {
-    errors.name = "El nombre es requerido y no debe contener números.";
-  }
-
-  if ((isNew || data.password !== undefined) && (!data.password || data.password.length < 6)) {
-    errors.password = "La contraseña debe tener al menos 6 caracteres.";
-  }
-
-  if ((isNew || data.mail !== undefined) && (!data.mail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.mail))) {
-    errors.mail = "El formato del correo electrónico es inválido.";
-  }
-
-  //DEVOLVEMOS ERRORES SI EXISTEN
-  return Object.keys(errors).length > 0 ? errors : null;
-};
 
 //GET ALL
 async function getAll(req, res) {
@@ -61,7 +40,7 @@ async function add(req, res) {
 
   try {
 
-    const errors = validateUserData(req.body, true);
+    const errors = validateUser(req.body);
     if (errors) {
       return res.status(400).json({
         message: "Datos de usuario inválidos",
@@ -78,7 +57,7 @@ async function add(req, res) {
       name,
       password,
       mail,
-      role,
+      role: role || "cliente", // puede haber usuarios tipo 'admin' || 'cliente'
       domicile,
       rfc,
     });
@@ -105,7 +84,7 @@ async function add(req, res) {
 async function update(req, res) {
   const id = req.params.id;
 
-  const errors = validateUserData(req.body, false);
+  const errors = validateUserUpdate(req.body);
   if (errors) {
     return res.status(400).json({
       message: "Datos de actualización inválidos",

@@ -1,4 +1,4 @@
-//IMPORTAMOS EL MODELO DE PRODUCTOS (ESM)
+import { validateProduct, validateProductUpdate } from "../utils/validations.js";
 import Product from "../models/product.model.js";
 
 //FUNCIÓN DE VALIDACIONES
@@ -68,7 +68,7 @@ async function add(req, res) {
   const { name, brand, stock, price, category, urlimg, codesat } = req.body;
 
   try {
-    const errors = validateProductData(req.body, true);
+    const errors = validateProduct(req.body);
     if (errors) {
       return res.status(400).json({
         message: "Datos del producto inválidos",
@@ -99,7 +99,7 @@ async function add(req, res) {
 async function update(req, res) {
   const id = req.params.id;
 
-  const errors = validateProductData(req.body, false);
+  const errors = validateProductUpdate(req.body);
   if (errors) {
     return res.status(400).json({
       message: "Datos de actualización inválidos",

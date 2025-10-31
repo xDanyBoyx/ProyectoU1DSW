@@ -32,7 +32,7 @@ async function findAll() {
         category: doc.data().category,
         urlimg: doc.data().urlimg,
         codesat: doc.data().codesat,
-        billid: doc.data().billid
+        id_facturapi: doc.data().id_facturapi || null
       };
     });
   } catch (error) {
@@ -56,7 +56,7 @@ async function findById(productId) {
         category: snapshot.data().category,
         urlimg: snapshot.data().urlimg,
         codesat: snapshot.data().codesat,
-        billid: snapshot.data().billid
+        id_facturapi: snapshot.data().id_facturapi || null
       }
       : null;
   } catch (error) {
@@ -74,13 +74,14 @@ async function addProduct({
   category,
   urlimg,
   codesat,
+  id_facturapi
 }) {
   try {
     const newProduct = {
-      billid: randomUUID(),
+      id_facturapi,
       name,
       brand: brand || "",
-      stock: Number(stock) || 0,
+      stock: Number(stock) || 1,
       price: Number(price),
       category: category || "",
       urlimg: urlimg || "https://picsum.photos/200", //PICSUM PARA FOTOS ALEATORIAS
@@ -92,7 +93,7 @@ async function addProduct({
 
     return {
       id: docRef.id,
-      billid: newProduct.billid,
+      id_facturapi: newProduct.id_facturapi,
       name: newProduct.name,
       brand: newProduct.brand,
       stock: newProduct.stock,

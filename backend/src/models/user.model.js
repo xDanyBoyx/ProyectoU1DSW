@@ -31,7 +31,7 @@ async function findAll() {
         role: doc.data().role,
         rfc: doc.data().rfc,
         //password: doc.data().password,
-        billid: doc.data().billid
+        id_facturapi: doc.data().id_facturapi,
       };
     });
   } catch (error) {
@@ -54,7 +54,7 @@ async function findById(userId) {
         role: snapshot.data().role,
         rfc: snapshot.data().rfc,
         //password: snapshot.data().password,
-        billid: snapshot.data().billid
+        id_facturapi: snapshot.data().id_facturapi,
       }
       : null;
   } catch (error) {
@@ -73,13 +73,7 @@ async function findByMail(mail) {
     const data = docSnap.data();
     return {
       id: docSnap.id,
-      mail: data.mail,
-      name: data.name,
-      domicile: data.domicile,
-      role: data.role,
-      rfc: data.rfc,
-      password: data.password,
-      billid: data.billid,
+      password: data.password, // importante para verificar contraseña en api de login
     };
   } catch (error) {
     console.error("Error en archivo user.model.js función findByMail: ", error);
@@ -92,9 +86,10 @@ async function addUser({
   name,
   password,
   mail,
-  role = "cliente",
-  domicile = "",
-  rfc = "",
+  role,
+  domicile,
+  rfc,
+  id_facturapi
 }) {
   try {
     const existingUser = await findByMail(mail);
@@ -105,9 +100,9 @@ async function addUser({
       name,
       password: await bcrypt.hash(password, 10),
       role,
-      domicile,
+      domicile, // es un objeto
       rfc,
-      billid: randomUUID()
+      id_facturapi,
     };
 
     const docRef = doc(usersCollection, randomUUID());
@@ -120,7 +115,7 @@ async function addUser({
       role: newUser.role,
       domicile: newUser.domicile,
       rfc: newUser.rfc,
-      billid: newUser.billid
+      id_facturapi: newUser.id_facturapi
     };
   } catch (error) {
     console.error("Error en archivo user.model.js función addUser: ", error);
@@ -162,7 +157,7 @@ async function updateUser(userId, data) {
       role: updatedData.role ?? existingUser.role,
       domicile: updatedData.domicile ?? existingUser.domicile,
       rfc: updatedData.rfc ?? existingUser.rfc,
-      billid: existingUser.billid
+      id_facturapi: existingUser.id_facturapi
     };
   } catch (error) {
     console.error("Error en archivo user.model.js función updateUser: ", error);
@@ -224,7 +219,6 @@ async function filterUser(filter = {}) {
   }
 }
 
-//EXPORTAMOS LAS DIVERSAS FUNCIONES (ESM)
 export default {
   findAll,
   findById,
