@@ -1,21 +1,30 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import UserModel from "../models/user.model.js";
+import {createFacturapiCustomer} from "../services/facturapiService.js";
 import { validateUser } from "../utils/validations.js";
-
 
 const JWT_SECRET = process.env.JWT_SECRET || "1234";
 
 //FUNCIÓN DE REGISTRO
 async function register(req, res) {
-  const { name, password, mail, role, domicile, rfc } = req.body;
+
+  const {
+    name,
+    password,
+    mail,
+    role,
+    domicile,
+    rfc,
+    rf, // régimen fiscal
+    phone
+  } = req.body;
 
   try {
 
     const errors = validateUser(req.body, true);
     if (errors) {
       return res.status(400).json({
-        message: "Datos de usuario inválidos",
         errors,
       });
     }
@@ -25,14 +34,33 @@ async function register(req, res) {
       return res.status(409).json({ message: "El correo ya está registrado" });
     }
 
+    const customerFacturapi = await createFacturapiCustomer(req.body);
+    
+    if (!customerFacturapi) {
+      return res.status(500).json({ message: "Error al crear usuario" });
+    }
+
+    console.log(name,
+      password,
+      mail,
+      role || "cliente", // puede haber usuarios tipo 'admin' || 'cliente'
+      domicile,
+      rfc,
+      rf,
+      phone,
+      customerFacturapi.id);
+    
+
     const newUser = await UserModel.addUser({
       name,
       password,
       mail,
-      role : role || "cliente",
+      role: role || "cliente", // puede haber usuarios tipo 'admin' || 'cliente'
       domicile,
       rfc,
-      id_facturapi: "id_facturapi"
+      rf,
+      phone,
+      id_facturapi: customerFacturapi.id
     });
 
     res.status(201).json({
@@ -44,6 +72,8 @@ async function register(req, res) {
         role: newUser.role,
         domicile: newUser.domicile,
         rfc: newUser.rfc,
+        rf: newUser.rf,
+        phone: newUser.phone,
         id_facturapi: newUser.id_facturapi
       },
     });

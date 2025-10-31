@@ -1,36 +1,5 @@
-import { validateProduct, validateProductUpdate } from "../utils/validations.js";
+import { validateProduct } from "../utils/validations.js";
 import Product from "../models/product.model.js";
-
-//FUNCIÓN DE VALIDACIONES
-// isNew: si true valida campos obligatorios para creación; si false valida sólo los campos presentes
-const validateProductData = (data, isNew = true) => {
-  const errors = {};
-
-  if ((isNew || data.name !== undefined) && !data.name) {
-    errors.name = "El nombre del producto es requerido.";
-  }
-
-  if ((isNew || data.price !== undefined)) {
-    if (!data.price) {
-      errors.price = "El precio es requerido.";
-    } else if (isNaN(data.price) || Number(data.price) <= 0) {
-      errors.price = "El precio debe ser un número mayor que 0.";
-    }
-  }
-
-  if ((isNew || data.stock !== undefined)) {
-    if (data.stock && (isNaN(data.stock) || Number(data.stock) < 0)) {
-      errors.stock = "El stock debe ser un número mayor o igual a 0.";
-    }
-  }
-
-  if ((isNew || data.category !== undefined) && !data.category) {
-    errors.category = "La categoría es requerida.";
-  }
-
-  //DEVOLVEMOS ERRORES SI EXISTEN
-  return Object.keys(errors).length > 0 ? errors : null;
-};
 
 //GET ALL
 async function getAll(req, res) {
@@ -71,7 +40,6 @@ async function add(req, res) {
     const errors = validateProduct(req.body);
     if (errors) {
       return res.status(400).json({
-        message: "Datos del producto inválidos",
         errors,
       });
     }
@@ -99,10 +67,9 @@ async function add(req, res) {
 async function update(req, res) {
   const id = req.params.id;
 
-  const errors = validateProductUpdate(req.body);
+  const errors = validateProduct(req.body);
   if (errors) {
     return res.status(400).json({
-      message: "Datos de actualización inválidos",
       errors,
     });
   }

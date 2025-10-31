@@ -1,4 +1,4 @@
-import { validateUser, validateUserUpdate } from "../utils/validations.js";
+import { validateUser } from "../utils/validations.js";
 import UserModel from "../models/user.model.js";
 
 //GET ALL
@@ -36,14 +36,22 @@ async function getById(req, res) {
 //POST
 async function add(req, res) {
 
-  const { name, password, mail, role, domicile, rfc } = req.body;
+  const {
+    name,
+    password,
+    mail,
+    role,
+    domicile,
+    rfc,
+    rf, // régimen fiscal
+    phone
+  } = req.body;
 
   try {
 
     const errors = validateUser(req.body);
     if (errors) {
       return res.status(400).json({
-        message: "Datos de usuario inválidos",
         errors,
       });
     }
@@ -54,13 +62,16 @@ async function add(req, res) {
     }
 
     const newUser = await UserModel.addUser({
-      name,
-      password,
-      mail,
-      role: role || "cliente", // puede haber usuarios tipo 'admin' || 'cliente'
-      domicile,
-      rfc,
-    });
+          name,
+          password,
+          mail,
+          role: role || "cliente", // puede haber usuarios tipo 'admin' || 'cliente'
+          domicile,
+          rfc,
+          rf,
+          phone,
+          id_facturapi: "id_facturapi"
+        });
 
     res.status(201).json({
       message: "Usuario registrado correctamente",
@@ -84,10 +95,9 @@ async function add(req, res) {
 async function update(req, res) {
   const id = req.params.id;
 
-  const errors = validateUserUpdate(req.body);
+  const errors = validateUser(req.body);
   if (errors) {
     return res.status(400).json({
-      message: "Datos de actualización inválidos",
       errors,
     });
   }

@@ -35,7 +35,7 @@ async function findAll() {
       };
     });
   } catch (error) {
-    console.error("Error en archivo user.model.js función findAll: ", error);
+    console.error("❌ Error en archivo user.model.js función findAll: ", error);
     throw new Error("Error al consultar la información.");
   }
 }
@@ -58,7 +58,7 @@ async function findById(userId) {
       }
       : null;
   } catch (error) {
-    console.error("Error en archivo user.model.js función findById: ", error);
+    console.error("❌ Error en archivo user.model.js función findById: ", error);
     throw new Error("Error al consultar la información.");
   }
 }
@@ -76,7 +76,7 @@ async function findByMail(mail) {
       password: data.password, // importante para verificar contraseña en api de login
     };
   } catch (error) {
-    console.error("Error en archivo user.model.js función findByMail: ", error);
+    console.error("❌ Error en archivo user.model.js función findByMail: ", error);
     throw new Error("Error al consultar la información.");
   }
 }
@@ -89,6 +89,8 @@ async function addUser({
   role,
   domicile,
   rfc,
+  rf, // régimen fiscal
+  phone,
   id_facturapi
 }) {
   try {
@@ -102,6 +104,8 @@ async function addUser({
       role,
       domicile, // es un objeto
       rfc,
+      rf,
+      phone,
       id_facturapi,
     };
 
@@ -115,10 +119,12 @@ async function addUser({
       role: newUser.role,
       domicile: newUser.domicile,
       rfc: newUser.rfc,
+      rf: newUser.rf, 
+      phone: newUser.phone, 
       id_facturapi: newUser.id_facturapi
     };
   } catch (error) {
-    console.error("Error en archivo user.model.js función addUser: ", error);
+    console.error("❌ Error en archivo user.model.js función addUser: ", error);
     throw new Error("Error al crear el usuario.");
   }
 }
@@ -157,10 +163,12 @@ async function updateUser(userId, data) {
       role: updatedData.role ?? existingUser.role,
       domicile: updatedData.domicile ?? existingUser.domicile,
       rfc: updatedData.rfc ?? existingUser.rfc,
+      rf: updatedData.rf ?? existingUser.rf, 
+      phone: updatedData.phone ?? existingUser.phone, 
       id_facturapi: existingUser.id_facturapi
     };
   } catch (error) {
-    console.error("Error en archivo user.model.js función updateUser: ", error);
+    console.error("❌ Error en archivo user.model.js función updateUser: ", error);
     throw new Error("Error al actualizar el usuario.");
   }
 }
@@ -174,7 +182,7 @@ async function deleteUser(userid) {
     await deleteDoc(userRef);
     return true;
   } catch (error) {
-    console.error("Error en archivo user.model.js función deleteUser: ", error);
+    console.error("❌ Error en archivo user.model.js función deleteUser: ", error);
     throw new Error("Error al eliminar el usuario.");
   }
 }
@@ -214,7 +222,7 @@ async function filterUser(filter = {}) {
 
     return result;
   } catch (error) {
-    console.error("Error en archivo user.model.js función filterUser: ", error);
+    console.error("❌ Error en archivo user.model.js función filterUser: ", error);
     throw new Error("Error al filtrar usuarios.");
   }
 }

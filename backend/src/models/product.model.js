@@ -36,7 +36,7 @@ async function findAll() {
       };
     });
   } catch (error) {
-    console.error("Error en archivo product.model.js función findAll: ", error);
+    console.error("❌ Error en archivo product.model.js función findAll: ", error);
     throw new Error("Error al consultar la información.");
   }
 }
@@ -60,7 +60,7 @@ async function findById(productId) {
       }
       : null;
   } catch (error) {
-    console.error("Error en archivo product.model.js función findById: ", error);
+    console.error("❌ Error en archivo product.model.js función findById: ", error);
     throw new Error("Error al consultar la información.");
   }
 }
@@ -103,7 +103,7 @@ async function addProduct({
       codesat: newProduct.codesat,
     };
   } catch (error) {
-    console.error("Error en archivo product.model.js función addProduct: ", error);
+    console.error("❌ Error en archivo product.model.js función addProduct: ", error);
     throw new Error("Error al crear producto.");
   }
 
@@ -146,7 +146,7 @@ async function updateProduct(productId, data) {
       urlimg: updatedData.urlimg ?? existingProduct.urlimg
     };
   } catch (error) {
-    console.error("Error en archivo product.model.js función updateProduct: ", error);
+    console.error("❌ Error en archivo product.model.js función updateProduct: ", error);
     throw new Error("Error al actualizar el producto.");
   }
 }
@@ -161,7 +161,7 @@ async function deleteProduct(productId) {
     await deleteDoc(productRef);
     return true;
   } catch (error) {
-    console.error("Error en archivo product.model.js función deleteProduct: ", error);
+    console.error("❌ Error en archivo product.model.js función deleteProduct: ", error);
     throw new Error("Error al eliminar el producto.");
   }
 }
@@ -206,7 +206,7 @@ async function filterProduct(filter = {}) {
 
     return result;
   } catch (error) {
-    console.error("Error en archivo product.model.js función filterProduct: ", error);
+    console.error("❌ Error en archivo product.model.js función filterProduct: ", error);
     throw new Error("Error al filtrar productos.");
   }
 }
