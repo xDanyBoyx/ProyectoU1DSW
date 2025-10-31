@@ -40,7 +40,7 @@ const Login = () => {
   return (
     <main className="flex min-h-svh flex-col items-center justify-center bg-[url(/mountains.jpg)] bg-cover p-4">
       <section className="flex flex-col gap-4 rounded-2xl bg-gray-400/95 p-15 w-full max-w-md">
-        <h1 className="text-center font-semibold text-xl">Inicio de sesión</h1>
+        <h1 className="text-center font-semibold text-2xl">Inicio de sesión</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <Label htmlFor="mail">Correo:</Label>
@@ -86,7 +86,7 @@ const Login = () => {
             disabled={isLoading || !dataForm.mail || !dataForm.password}
           >Ingresar</Button>
 
-          <p>¿Aún no tienes una cuenta? <NavLink to="/register">Regístrate aquí.</NavLink></p>
+          <p>¿Aún no tienes una cuenta? <NavLink to="/register" className={"font-semibold hover:underline"}>Regístrate aquí.</NavLink></p>
         </form>
       </section>
     </main>
