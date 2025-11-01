@@ -32,11 +32,11 @@ async function findAll() {
         category: doc.data().category,
         urlimg: doc.data().urlimg,
         codesat: doc.data().codesat,
-        billid: doc.data().billid
+        id_facturapi: doc.data().id_facturapi || null
       };
     });
   } catch (error) {
-    console.error("Error en archivo product.model.js función findAll: ", error);
+    console.error("❌ Error en archivo product.model.js función findAll: ", error);
     throw new Error("Error al consultar la información.");
   }
 }
@@ -56,11 +56,11 @@ async function findById(productId) {
         category: snapshot.data().category,
         urlimg: snapshot.data().urlimg,
         codesat: snapshot.data().codesat,
-        billid: snapshot.data().billid
+        id_facturapi: snapshot.data().id_facturapi || null
       }
       : null;
   } catch (error) {
-    console.error("Error en archivo product.model.js función findById: ", error);
+    console.error("❌ Error en archivo product.model.js función findById: ", error);
     throw new Error("Error al consultar la información.");
   }
 }
@@ -74,13 +74,14 @@ async function addProduct({
   category,
   urlimg,
   codesat,
+  id_facturapi
 }) {
   try {
     const newProduct = {
-      billid: randomUUID(),
+      id_facturapi,
       name,
       brand: brand || "",
-      stock: Number(stock) || 0,
+      stock: Number(stock) || 1,
       price: Number(price),
       category: category || "",
       urlimg: urlimg || "https://picsum.photos/200", //PICSUM PARA FOTOS ALEATORIAS
@@ -92,7 +93,7 @@ async function addProduct({
 
     return {
       id: docRef.id,
-      billid: newProduct.billid,
+      id_facturapi: newProduct.id_facturapi,
       name: newProduct.name,
       brand: newProduct.brand,
       stock: newProduct.stock,
@@ -102,7 +103,7 @@ async function addProduct({
       codesat: newProduct.codesat,
     };
   } catch (error) {
-    console.error("Error en archivo product.model.js función addProduct: ", error);
+    console.error("❌ Error en archivo product.model.js función addProduct: ", error);
     throw new Error("Error al crear producto.");
   }
 
@@ -145,7 +146,7 @@ async function updateProduct(productId, data) {
       urlimg: updatedData.urlimg ?? existingProduct.urlimg
     };
   } catch (error) {
-    console.error("Error en archivo product.model.js función updateProduct: ", error);
+    console.error("❌ Error en archivo product.model.js función updateProduct: ", error);
     throw new Error("Error al actualizar el producto.");
   }
 }
@@ -160,7 +161,7 @@ async function deleteProduct(productId) {
     await deleteDoc(productRef);
     return true;
   } catch (error) {
-    console.error("Error en archivo product.model.js función deleteProduct: ", error);
+    console.error("❌ Error en archivo product.model.js función deleteProduct: ", error);
     throw new Error("Error al eliminar el producto.");
   }
 }
@@ -205,7 +206,7 @@ async function filterProduct(filter = {}) {
 
     return result;
   } catch (error) {
-    console.error("Error en archivo product.model.js función filterProduct: ", error);
+    console.error("❌ Error en archivo product.model.js función filterProduct: ", error);
     throw new Error("Error al filtrar productos.");
   }
 }

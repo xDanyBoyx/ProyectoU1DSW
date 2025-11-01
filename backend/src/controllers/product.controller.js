@@ -1,36 +1,6 @@
-//IMPORTAMOS EL MODELO DE PRODUCTOS (ESM)
+import { validateProduct } from "../utils/validations.js";
 import Product from "../models/product.model.js";
-
-//FUNCIÓN DE VALIDACIONES
-// isNew: si true valida campos obligatorios para creación; si false valida sólo los campos presentes
-const validateProductData = (data, isNew = true) => {
-  const errors = {};
-
-  if ((isNew || data.name !== undefined) && !data.name) {
-    errors.name = "El nombre del producto es requerido.";
-  }
-
-  if ((isNew || data.price !== undefined)) {
-    if (!data.price) {
-      errors.price = "El precio es requerido.";
-    } else if (isNaN(data.price) || Number(data.price) <= 0) {
-      errors.price = "El precio debe ser un número mayor que 0.";
-    }
-  }
-
-  if ((isNew || data.stock !== undefined)) {
-    if (data.stock && (isNaN(data.stock) || Number(data.stock) < 0)) {
-      errors.stock = "El stock debe ser un número mayor o igual a 0.";
-    }
-  }
-
-  if ((isNew || data.category !== undefined) && !data.category) {
-    errors.category = "La categoría es requerida.";
-  }
-
-  //DEVOLVEMOS ERRORES SI EXISTEN
-  return Object.keys(errors).length > 0 ? errors : null;
-};
+import { createFacturapiProducto } from "../services/facturapiService.js";
 
 //GET ALL
 async function getAll(req, res) {
@@ -43,7 +13,6 @@ async function getAll(req, res) {
     }
 
     const data = await Product.findAll();
-    console.log(data);
 
     res.status(200).json(data);
   } catch (error) {
@@ -68,12 +37,17 @@ async function add(req, res) {
   const { name, brand, stock, price, category, urlimg, codesat } = req.body;
 
   try {
-    const errors = validateProductData(req.body, true);
+    const errors = validateProduct(req.body);
     if (errors) {
       return res.status(400).json({
-        message: "Datos del producto inválidos",
         errors,
       });
+    }
+
+    const productFacturapi = await createFacturapiProducto(req.body);
+
+    if (!productFacturapi) {
+      return res.status(500).json({ message: "Error al añadir producto" });
     }
 
     const newProduct = await Product.addProduct({
@@ -84,6 +58,7 @@ async function add(req, res) {
       category,
       urlimg,
       codesat,
+      id_facturapi: productFacturapi.id
     });
 
     res.status(201).json({
@@ -99,10 +74,9 @@ async function add(req, res) {
 async function update(req, res) {
   const id = req.params.id;
 
-  const errors = validateProductData(req.body, false);
+  const errors = validateProduct(req.body);
   if (errors) {
     return res.status(400).json({
-      message: "Datos de actualización inválidos",
       errors,
     });
   }

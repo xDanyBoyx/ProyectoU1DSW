@@ -1,26 +1,6 @@
-//IMPORTAMOS EL MODELO DE USUARIOS (ESM)
+import { validateUser } from "../utils/validations.js";
 import UserModel from "../models/user.model.js";
-
-//FUNCIÓN DE VALIDACIONES
-// isNew: si true valida campos obligatorios para creación; si false valida sólo los campos presentes
-const validateUserData = (data, isNew = true) => {
-  const errors = {};
-
-  if ((isNew || data.name !== undefined) && (!data.name || typeof data.name !== "string" || /\d/.test(data.name))) {
-    errors.name = "El nombre es requerido y no debe contener números.";
-  }
-
-  if ((isNew || data.password !== undefined) && (!data.password || data.password.length < 6)) {
-    errors.password = "La contraseña debe tener al menos 6 caracteres.";
-  }
-
-  if ((isNew || data.mail !== undefined) && (!data.mail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.mail))) {
-    errors.mail = "El formato del correo electrónico es inválido.";
-  }
-
-  //DEVOLVEMOS ERRORES SI EXISTEN
-  return Object.keys(errors).length > 0 ? errors : null;
-};
+import { createFacturapiCustomer } from "../services/facturapiService.js";
 
 //GET ALL
 async function getAll(req, res) {
@@ -28,12 +8,12 @@ async function getAll(req, res) {
 
   try {
     if (Object.keys(filters).length > 0) {
+
       const data = await UserModel.filterUser(filters);
       return res.status(200).json(data);
     }
 
     const data = await UserModel.findAll();
-    console.log(data);
 
     res.status(200).json(data);
   } catch (error) {
@@ -57,14 +37,22 @@ async function getById(req, res) {
 //POST
 async function add(req, res) {
 
-  const { name, password, mail, role, domicile, rfc } = req.body;
+  const {
+    name,
+    password,
+    mail,
+    role,
+    domicile,
+    rfc,
+    rf, // régimen fiscal
+    phone
+  } = req.body;
 
   try {
 
-    const errors = validateUserData(req.body, true);
+    const errors = validateUser(req.body);
     if (errors) {
       return res.status(400).json({
-        message: "Datos de usuario inválidos",
         errors,
       });
     }
@@ -74,13 +62,22 @@ async function add(req, res) {
       return res.status(409).json({ message: "El correo ya está registrado" });
     }
 
+    const customerFacturapi = await createFacturapiCustomer(req.body);
+
+    if (!customerFacturapi) {
+      return res.status(500).json({ message: "Error al crear usuario" });
+    }
+
     const newUser = await UserModel.addUser({
       name,
       password,
       mail,
-      role,
+      role: role || "cliente", // puede haber usuarios tipo 'admin' || 'cliente'
       domicile,
       rfc,
+      rf,
+      phone,
+      id_facturapi: customerFacturapi.id
     });
 
     res.status(201).json({
@@ -92,9 +89,12 @@ async function add(req, res) {
         role: newUser.role,
         domicile: newUser.domicile,
         rfc: newUser.rfc,
-        billid: newUser.billid
+        rf: newUser.rf,
+        phone: newUser.phone,
+        id_facturapi: newUser.id_facturapi
       },
     });
+
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -105,10 +105,9 @@ async function add(req, res) {
 async function update(req, res) {
   const id = req.params.id;
 
-  const errors = validateUserData(req.body, false);
+  const errors = validateUser(req.body);
   if (errors) {
     return res.status(400).json({
-      message: "Datos de actualización inválidos",
       errors,
     });
   }

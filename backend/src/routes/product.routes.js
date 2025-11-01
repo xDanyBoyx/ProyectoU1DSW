@@ -6,11 +6,11 @@ import { authenticate } from "../middleware/auth.middleware.js";
 const router = express.Router();
 
 //RUTAS CRUD PARA PRODUCTOS (PROTEGIDAS CON JWT)
-router.get("/", authenticate, controller.getAll);
-router.get("/:id", authenticate, controller.getById);
-router.post("/", authenticate, controller.add);
-router.put("/:id", authenticate, controller.update);
-router.delete("/:id", authenticate, controller.remove);
+router.get("/", controller.getAll);
+router.get("/:id", controller.getById);
+router.post("/", controller.add);
+router.put("/:id", controller.update);
+router.delete("/:id", controller.remove);
 
 // EXPORTAMOS EL ROUTER (ESM)
 export default router;

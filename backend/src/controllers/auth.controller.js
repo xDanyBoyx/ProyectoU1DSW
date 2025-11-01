@@ -1,33 +1,30 @@
-//IMPORTAMOS DEPENDENCIAS
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import UserModel from "../models/user.model.js";
-
+import {createFacturapiCustomer} from "../services/facturapiService.js";
+import { validateUser } from "../utils/validations.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "1234";
 
-//FUNCIÓN DE VALIDACIONES
-const validateUserData = (data) => {
-  const errors = {};
-
-  if (!data.name || typeof data.name !== "string" || /\d/.test(data.name)) errors.name = "El nombre es requerido y no debe contener números.";
-  if (!data.password || data.password.length < 6) errors.password = "La contraseña debe tener al menos 6 caracteres.";
-  if (!data.mail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.mail)) errors.mail = "El formato del correo electrónico es inválido.";
-
-  //DEVOLVEMOS ERRORES SI EXISTEN
-  return Object.keys(errors).length > 0 ? errors : null;
-};
-
 //FUNCIÓN DE REGISTRO
 async function register(req, res) {
-  const { name, password, mail, role, domicile, rfc } = req.body;
+
+  const {
+    name,
+    password,
+    mail,
+    role,
+    domicile,
+    rfc,
+    rf, // régimen fiscal
+    phone
+  } = req.body;
 
   try {
 
-    const errors = validateUserData(req.body, true);
+    const errors = validateUser(req.body, true);
     if (errors) {
       return res.status(400).json({
-        message: "Datos de usuario inválidos",
         errors,
       });
     }
@@ -37,13 +34,22 @@ async function register(req, res) {
       return res.status(409).json({ message: "El correo ya está registrado" });
     }
 
+    const customerFacturapi = await createFacturapiCustomer(req.body);
+    
+    if (!customerFacturapi) {
+      return res.status(500).json({ message: "Error al crear usuario" });
+    }
+
     const newUser = await UserModel.addUser({
       name,
       password,
       mail,
-      role,
+      role: role || "cliente", // puede haber usuarios tipo 'admin' || 'cliente'
       domicile,
       rfc,
+      rf,
+      phone,
+      id_facturapi: customerFacturapi.id
     });
 
     res.status(201).json({
@@ -55,7 +61,9 @@ async function register(req, res) {
         role: newUser.role,
         domicile: newUser.domicile,
         rfc: newUser.rfc,
-        billid: newUser.billid
+        rf: newUser.rf,
+        phone: newUser.phone,
+        id_facturapi: newUser.id_facturapi
       },
     });
   } catch (error) {
@@ -92,4 +100,4 @@ async function login(req, res) {
   res.status(200).json({ token });
 }
 
-export { register, login };
+export default { register, login };
