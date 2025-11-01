@@ -41,15 +41,13 @@
   "mail": "string",
   "role": "string",
   "domicile": {
-    "street": "string",
-    "exterior": "string",
-    "interior": "string",
-    "neighborhood": "string",
-    "city": "string",
-    "municipality": "string",
-    "zip": "string",
-    "state": "string",
-    "country": "string"
+    "cp": "string",
+    "calle": "string",
+    "numeroExt": "string",
+    "colonia": "string",
+    "ciudad": "string",
+    "municipio": "string",
+    "estado": "string"
   },
   "rfc": "string",
   "rf": "string",
@@ -65,15 +63,13 @@
 | mail | string | Sí | Correo electrónico único |
 | role | string | No | Rol del usuario ('admin' o 'cliente'). Default: 'cliente' |
 | domicile | object | Sí | Objeto con la dirección completa del usuario |
-| domicile.street | string | Sí | Nombre de la calle |
-| domicile.exterior | string | Sí | Número exterior |
-| domicile.interior | string | No | Número interior |
-| domicile.neighborhood | string | Sí | Colonia o barrio |
-| domicile.city | string | Sí | Ciudad |
-| domicile.municipality | string | Sí | Municipio o delegación |
-| domicile.zip | string | Sí | Código postal |
-| domicile.state | string | Sí | Estado |
-| domicile.country | string | Sí | País |
+| domicile.cp | string | Sí | Código postal |
+| domicile.calle | string | Sí | Nombre de la calle |
+| domicile.numeroExt | string | Sí | Número exterior |
+| domicile.colonia | string | Sí | Colonia |
+| domicile.ciudad | string | Sí | Ciudad |
+| domicile.municipio | string | Sí | Municipio |
+| domicile.estado | string | Sí | Estado |
 | rfc | string | Sí | RFC del usuario |
 | rf | string | Sí | Régimen fiscal |
 | phone | string | Sí | Teléfono de contacto |
@@ -88,15 +84,13 @@
     "mail": "string",
     "role": "string",
     "domicile": {
-      "street": "string",
-      "exterior": "string",
-      "interior": "string",
-      "neighborhood": "string",
-      "city": "string",
-      "municipality": "string",
-      "zip": "string",
-      "state": "string",
-      "country": "string"
+      "cp": "string",
+      "calle": "string",
+      "numeroExt": "string",
+      "colonia": "string",
+      "ciudad": "string",
+      "municipio": "string",
+      "estado": "string"
     },
     "rfc": "string",
     "rf": "string",
@@ -195,15 +189,13 @@
     "mail": "string",
     "role": "string",
     "domicile": {
-      "street": "string",
-      "exterior": "string",
-      "interior": "string",
-      "neighborhood": "string",
-      "city": "string",
-      "municipality": "string",
-      "zip": "string",
-      "state": "string",
-      "country": "string"
+      "cp": "string",
+      "calle": "string",
+      "numeroExt": "string",
+      "colonia": "string",
+      "ciudad": "string",
+      "municipio": "string",
+      "estado": "string"
     },
     "rfc": "string",
     "rf": "string",
@@ -242,15 +234,13 @@ GET /api/users/5
   "mail": "string",
   "role": "string",
   "domicile": {
-    "street": "string",
-    "exterior": "string",
-    "interior": "string",
-    "neighborhood": "string",
-    "city": "string",
-    "municipality": "string",
-    "zip": "string",
-    "state": "string",
-    "country": "string"
+    "cp": "string",
+    "calle": "string",
+    "numeroExt": "string",
+    "colonia": "string",
+    "ciudad": "string",
+    "municipio": "string",
+    "estado": "string"
   },
   "rfc": "string",
   "rf": "string",
@@ -279,15 +269,13 @@ GET /api/users/5
   "mail": "string",
   "role": "string",
   "domicile": {
-    "street": "string",
-    "exterior": "string",
-    "interior": "string",
-    "neighborhood": "string",
-    "city": "string",
-    "municipality": "string",
-    "zip": "string",
-    "state": "string",
-    "country": "string"
+    "cp": "string",
+    "calle": "string",
+    "numeroExt": "string",
+    "colonia": "string",
+    "ciudad": "string",
+    "municipio": "string",
+    "estado": "string"
   },
   "rfc": "string",
   "rf": "string",
@@ -303,15 +291,13 @@ GET /api/users/5
 | mail | string | Sí | Correo electrónico único |
 | role | string | No | Rol del usuario. Default: 'cliente' |
 | domicile | object | Sí | Objeto con la dirección completa del usuario |
-| domicile.street | string | Sí | Nombre de la calle |
-| domicile.exterior | string | Sí | Número exterior |
-| domicile.interior | string | No | Número interior |
-| domicile.neighborhood | string | Sí | Colonia o barrio |
-| domicile.city | string | Sí | Ciudad |
-| domicile.municipality | string | Sí | Municipio o delegación |
-| domicile.zip | string | Sí | Código postal |
-| domicile.state | string | Sí | Estado |
-| domicile.country | string | Sí | País |
+| domicile.cp | string | Sí | Código postal |
+| domicile.calle | string | Sí | Nombre de la calle |
+| domicile.numeroExt | string | Sí | Número exterior |
+| domicile.colonia | string | Sí | Colonia |
+| domicile.ciudad | string | Sí | Ciudad |
+| domicile.municipio | string | Sí | Municipio |
+| domicile.estado | string | Sí | Estado |
 | rfc | string | Sí | RFC del usuario |
 | rf | string | Sí | Régimen fiscal |
 | phone | string | Sí | Teléfono de contacto |
@@ -326,15 +312,13 @@ GET /api/users/5
     "mail": "string",
     "role": "string",
     "domicile": {
-      "street": "string",
-      "exterior": "string",
-      "interior": "string",
-      "neighborhood": "string",
-      "city": "string",
-      "municipality": "string",
-      "zip": "string",
-      "state": "string",
-      "country": "string"
+      "cp": "string",
+      "calle": "string",
+      "numeroExt": "string",
+      "colonia": "string",
+      "ciudad": "string",
+      "municipio": "string",
+      "estado": "string"
     },
     "rfc": "string",
     "rf": "string",
@@ -370,15 +354,13 @@ GET /api/users/5
   "mail": "string",
   "role": "string",
   "domicile": {
-    "street": "string",
-    "exterior": "string",
-    "interior": "string",
-    "neighborhood": "string",
-    "city": "string",
-    "municipality": "string",
-    "zip": "string",
-    "state": "string",
-    "country": "string"
+    "cp": "string",
+    "calle": "string",
+    "numeroExt": "string",
+    "colonia": "string",
+    "ciudad": "string",
+    "municipio": "string",
+    "estado": "string"
   },
   "rfc": "string",
   "rf": "string",
@@ -399,15 +381,13 @@ PUT /api/users/5
   "mail": "string",
   "role": "string",
   "domicile": {
-    "street": "string",
-    "exterior": "string",
-    "interior": "string",
-    "neighborhood": "string",
-    "city": "string",
-    "municipality": "string",
-    "zip": "string",
-    "state": "string",
-    "country": "string"
+    "cp": "string",
+    "calle": "string",
+    "numeroExt": "string",
+    "colonia": "string",
+    "ciudad": "string",
+    "municipio": "string",
+    "estado": "string"
   },
   "rfc": "string",
   "rf": "string",
@@ -700,15 +680,13 @@ DELETE /api/products/10
   mail: string,             // Correo electrónico único
   role: string,             // 'admin' o 'cliente'
   domicile: {               // Dirección completa del usuario
-    street: string,         // Nombre de la calle
-    exterior: string,       // Número exterior
-    interior: string,       // Número interior (opcional)
-    neighborhood: string,   // Colonia o barrio
-    city: string,           // Ciudad
-    municipality: string,   // Municipio o delegación
-    zip: string,            // Código postal
-    state: string,          // Estado
-    country: string         // País
+    cp: string,             // Código postal
+    calle: string,          // Nombre de la calle
+    numeroExt: string,      // Número exterior
+    colonia: string,        // Colonia
+    ciudad: string,         // Ciudad
+    municipio: string,      // Municipio
+    estado: string          // Estado
   },
   rfc: string,              // RFC para facturación
   rf: string,               // Régimen fiscal
@@ -805,15 +783,13 @@ curl -X POST http://localhost:3000/api/auth/register \
     "mail": "juan@example.com",
     "role": "cliente",
     "domicile": {
-      "street": "Calle Principal",
-      "exterior": "123",
-      "interior": "Depto 4B",
-      "neighborhood": "Centro",
-      "city": "Tepic",
-      "municipality": "Tepic",
-      "zip": "63000",
-      "state": "Nayarit",
-      "country": "México"
+      "cp": "63114",
+      "calle": "tucan",
+      "numeroExt": "25",
+      "colonia": "Ecologistas",
+      "ciudad": "tepic",
+      "municipio": "tepic",
+      "estado": "nayarit"
     },
     "rfc": "PEMJ900101XXX",
     "rf": "601",
