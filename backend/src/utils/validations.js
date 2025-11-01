@@ -1,6 +1,4 @@
 
-// ============= VALIDACIONES PARA CREATE (POST) =============
-
 export const validateUser = (userData = {}) => {
     const {
         name,

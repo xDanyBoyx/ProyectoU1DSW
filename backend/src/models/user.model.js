@@ -30,7 +30,7 @@ async function findAll() {
         domicile: doc.data().domicile,
         role: doc.data().role,
         rfc: doc.data().rfc,
-        rf : doc.data().rf,
+        rf: doc.data().rf,
         phone: doc.data().phone,
         //password: doc.data().password,
         id_facturapi: doc.data().id_facturapi,
@@ -55,7 +55,7 @@ async function findById(userId) {
         domicile: snapshot.data().domicile,
         role: snapshot.data().role,
         rfc: snapshot.data().rfc,
-        rf : doc.data().rf,
+        rf: doc.data().rf,
         phone: doc.data().phone,
         //password: snapshot.data().password,
         id_facturapi: snapshot.data().id_facturapi,
@@ -123,8 +123,8 @@ async function addUser({
       role: newUser.role,
       domicile: newUser.domicile,
       rfc: newUser.rfc,
-      rf: newUser.rf, 
-      phone: newUser.phone, 
+      rf: newUser.rf,
+      phone: newUser.phone,
       id_facturapi: newUser.id_facturapi
     };
   } catch (error) {
@@ -167,8 +167,8 @@ async function updateUser(userId, data) {
       role: updatedData.role ?? existingUser.role,
       domicile: updatedData.domicile ?? existingUser.domicile,
       rfc: updatedData.rfc ?? existingUser.rfc,
-      rf: updatedData.rf ?? existingUser.rf, 
-      phone: updatedData.phone ?? existingUser.phone, 
+      rf: updatedData.rf ?? existingUser.rf,
+      phone: updatedData.phone ?? existingUser.phone,
       id_facturapi: existingUser.id_facturapi
     };
   } catch (error) {
@@ -191,65 +191,91 @@ async function deleteUser(userid) {
   }
 }
 
-//FUNCIÓN DE FILTRADO
-async function filterUser(filter = {}) {
+async function filterUser(filters = {}) {
   try {
+
+    // Obtener todos los usuarios
     const snapshot = await getDocs(usersCollection);
-    const docs = snapshot.docs.map((d) => ({ 
-      id: d.id, 
-      mail: d.mail,
-      name: d.name,
-      role: d.role,
-      domicile: d.domicile,
-      rfc: d.rfc,
-      rf: d.rf, 
-      phone: d.phone, 
-      id_facturapi: d.id_facturapi 
-    }));
+    const allUsers = snapshot.docs.map(doc => {
+      const data = doc.data();
 
-    let result = docs;
+      // Estructura consistente con todos los campos, excluyendo password
+      const { password, ...userData } = data;
 
-    if (filter.name) {
-      const q = String(filter.name).toLowerCase();
-      result = result.filter((u) => (u.name || "").toLowerCase().includes(q));
-    }
+      return {
+        id: doc.id,
+        mail: userData.mail,
+        name: userData.name,
+        domicile: userData.domicile,
+        role: userData.role,
+        rfc: userData.rfc,
+        rf: userData.rf,
+        phone: userData.phone,
+        id_facturapi: userData.id_facturapi,
+      };
+    });
 
-    if (filter.mail) {
-      const q = String(filter.mail).toLowerCase();
-      result = result.filter((u) => (u.mail || "").toLowerCase().includes(q));
-    }
+    let results = allUsers;
 
-    if (filter.role) {
-      const q = String(filter.role).toLowerCase();
-      result = result.filter((u) => (u.role || "").toLowerCase().includes(q));
-    }
-
-    if (filter.domicile) {
-      const q = String(filter.domicile).toLowerCase();
-      result = result.filter((u) =>
-        JSON.stringify(u.domicile || {}).toLowerCase().includes(q)
+    // Aplicar filtros de forma flexible
+    if (filters.name) {
+      const searchName = filters.name.toLowerCase();
+      results = results.filter(user =>
+        user.name?.toLowerCase().includes(searchName)
       );
     }
 
-    if (filter.rfc) {
-      const q = String(filter.rfc).toLowerCase();
-      result = result.filter((u) => (u.rfc || "").toLowerCase().includes(q));
+    if (filters.mail) {
+      const searchMail = filters.mail.toLowerCase();
+      results = results.filter(user =>
+        user.mail?.toLowerCase().includes(searchMail)
+      );
     }
 
-    if (filter.rf) {
-      const q = String(filter.rf).toLowerCase();
-      result = result.filter((u) => (u.rf || "").toLowerCase().includes(q));
+    if (filters.role) {
+      results = results.filter(user => user.role === filters.role);
     }
 
-    if (filter.phone) {
-      const q = String(filter.phone).toLowerCase();
-      result = result.filter((u) => (u.phone || "").toLowerCase().includes(q));
+    if (filters.rfc) {
+      const searchRfc = filters.rfc.toLowerCase();
+      results = results.filter(user =>
+        user.rfc?.toLowerCase().includes(searchRfc)
+      );
     }
 
-    return result;
+    if (filters.domicile && typeof filters.domicile === 'object') {
+      const domicileFilters = filters.domicile;
+
+      Object.entries(domicileFilters).forEach(([key, value]) => {
+        if (!value || value === '') return;
+
+        const searchValue = value.toLowerCase();
+
+        results = results.filter(user => {
+          const domicileValue = user.domicile?.[key];
+          return domicileValue?.toLowerCase().includes(searchValue);
+        });
+
+      });
+    }
+
+    if (filters.phone) {
+      results = results.filter(user =>
+        user.phone?.includes(filters.phone)
+      );
+    }
+
+    if (filters.rf) {
+      results = results.filter(user =>
+        user.rf?.includes(filters.rf)
+      );
+    }
+
+    return results;
+
   } catch (error) {
-    console.error("❌ Error en archivo user.model.js función filterUser: ", error);
-    throw new Error("Error al filtrar usuarios.");
+    console.error("❌ Error en user.model.js función filterUser:", error);
+    throw new Error("Error al consultar la información.");
   }
 }
 

@@ -12,7 +12,6 @@ async function getAll(req, res) {
     }
 
     const data = await Product.findAll();
-    console.log(data);
 
     res.status(200).json(data);
   } catch (error) {

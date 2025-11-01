@@ -7,14 +7,12 @@ async function getAll(req, res) {
 
   try {
     if (Object.keys(filters).length > 0) {
-      console.log("filtrando por estas cosas: ",filters);
       
       const data = await UserModel.filterUser(filters);
       return res.status(200).json(data);
     }
 
     const data = await UserModel.findAll();
-    console.log(data);
 
     res.status(200).json(data);
   } catch (error) {
