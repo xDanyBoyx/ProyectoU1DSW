@@ -11,7 +11,7 @@ collection:
     meta:
       id: req_86a21f0387b14274b4ac98b3784aebf4
       created: 1761629574076
-      modified: 1761669207417
+      modified: 1761949777467
       isPrivate: false
       description: ""
       sortKey: -1761629574076
@@ -61,7 +61,7 @@ collection:
     meta:
       id: req_65ab1abf5af5478bb0a280d86ef297f5
       created: 1761635073356
-      modified: 1761889171428
+      modified: 1761948110951
       isPrivate: false
       description: ""
       sortKey: -1760570279931.25
@@ -70,11 +70,13 @@ collection:
       mimeType: application/json
       text: |-
         {
-        	"name": "juanito perez el admin" ,
+        	"name": "probando mas veces" ,
         	"password": "123456",
-        	"mail": "prueba123@gmail.com",
+        	"mail": "asfhbrmasdfndo13q2@gmail.com",
+        	"rf": "605",
+        	"phone": "3111231212",
         	"domicile": {
-        		"cp": "631123",
+        		"cp": "63114",
         		"calle": "tucan",
         		"numeroExt": "25",
         		"colonia": "Ecologistas",
@@ -82,7 +84,7 @@ collection:
         		"municipio": "tepic",
         		"estado": "tepic"
         	},
-        	"rfc": "HIJKL234fvdc",
+        	"rfc": "MIJF010719D69",
         	"role": "cliente"
         }
     headers:
@@ -251,12 +253,12 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:3000/api/users?name=ana
+  - url: http://localhost:3000/api/users?role=cliente
     name: GET ALL USERS FILTERS
     meta:
       id: req_8bf70e16438a4dbe92afc581dd399d6d
       created: 1761642984547
-      modified: 1761669225615
+      modified: 1761962263910
       isPrivate: false
       description: ""
       sortKey: -1761276476027.75
@@ -326,12 +328,12 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:3000/api/products?brand=hp
+  - url: http://localhost:3000/api/products?category=Bebidas
     name: GET ALL PRODUCTS FILTERS
     meta:
       id: req_13c41dbfec6a4296b2a91a2e25b0bda9
       created: 1761646912770
-      modified: 1761648588318
+      modified: 1761962417367
       isPrivate: false
       description: ""
       sortKey: -1761099927003.625
@@ -356,7 +358,7 @@ collection:
     meta:
       id: req_7e046390c25c4c5ab714ae1d55cdc909
       created: 1761646988227
-      modified: 1761884199904
+      modified: 1761964164077
       isPrivate: false
       description: ""
       sortKey: -1760283387767.0469
@@ -365,12 +367,13 @@ collection:
       mimeType: application/json
       text: |-
         {
-          "name": "camisa",
-          "brand": "polo",
-          "stock": 1,
-          "price": 2000,
-          "category": "ropa",
-          "codesat": "5020271112"
+          "name": "estrella de la muerte",
+          "brand": "lego",
+          "stock": 20,
+          "price": 5000,
+          "category": "jugueteria",
+          "codesat": "60131324",
+        	"urlimg": "https://picsum.photos/200"
         }
     headers:
       - name: Content-Type
