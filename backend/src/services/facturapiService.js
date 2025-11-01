@@ -51,7 +51,6 @@ export const createFacturapiCustomer = async ({
 }) => {
     try {
         const facturapi = facturapiService.getFacturapi();
-        
         const customer = await facturapi.customers.create({
             legal_name: name, // Nombre o razón social
             tax_id: rfc, // RFC
@@ -72,6 +71,33 @@ export const createFacturapiCustomer = async ({
         return customer;
     } catch (error) {
         console.error('❌ Error al crear cliente en Facturapi: ', error);
+        return null;
+    }
+};
+
+export const createFacturapiProducto = async ({
+    name,
+    price,
+    codesat
+}) => {
+    try {
+        const facturapi = facturapiService.getFacturapi();
+        const product = await facturapi.products.create({
+            description: name,
+            product_key: codesat,
+            price,
+            tax_included: false,
+            //unit_key: ?  al parecer este atributo no es necesario. no lo fue :D
+            taxes: [
+                {
+                    type: 'IVA',
+                    rate: 0.16
+                }
+            ]
+        });
+        return product;
+    } catch (error) {
+        console.error('❌ Error al crear producto en Facturapi: ', error);
         return null;
     }
 };

@@ -1,5 +1,6 @@
 import { validateUser } from "../utils/validations.js";
 import UserModel from "../models/user.model.js";
+import { createFacturapiCustomer } from "../services/facturapiService.js";
 
 //GET ALL
 async function getAll(req, res) {
@@ -7,7 +8,7 @@ async function getAll(req, res) {
 
   try {
     if (Object.keys(filters).length > 0) {
-      
+
       const data = await UserModel.filterUser(filters);
       return res.status(200).json(data);
     }
@@ -61,17 +62,23 @@ async function add(req, res) {
       return res.status(409).json({ message: "El correo ya está registrado" });
     }
 
+    const customerFacturapi = await createFacturapiCustomer(req.body);
+
+    if (!customerFacturapi) {
+      return res.status(500).json({ message: "Error al crear usuario" });
+    }
+
     const newUser = await UserModel.addUser({
-          name,
-          password,
-          mail,
-          role: role || "cliente", // puede haber usuarios tipo 'admin' || 'cliente'
-          domicile,
-          rfc,
-          rf,
-          phone,
-          id_facturapi: "id_facturapi"
-        });
+      name,
+      password,
+      mail,
+      role: role || "cliente", // puede haber usuarios tipo 'admin' || 'cliente'
+      domicile,
+      rfc,
+      rf,
+      phone,
+      id_facturapi: customerFacturapi.id
+    });
 
     res.status(201).json({
       message: "Usuario registrado correctamente",
@@ -82,9 +89,12 @@ async function add(req, res) {
         role: newUser.role,
         domicile: newUser.domicile,
         rfc: newUser.rfc,
-        billid: newUser.billid
+        rf: newUser.rf,
+        phone: newUser.phone,
+        id_facturapi: newUser.id_facturapi
       },
     });
+
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

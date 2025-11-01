@@ -1,5 +1,6 @@
 import { validateProduct } from "../utils/validations.js";
 import Product from "../models/product.model.js";
+import { createFacturapiProducto } from "../services/facturapiService.js";
 
 //GET ALL
 async function getAll(req, res) {
@@ -43,6 +44,12 @@ async function add(req, res) {
       });
     }
 
+    const productFacturapi = await createFacturapiProducto(req.body);
+
+    if (!productFacturapi) {
+      return res.status(500).json({ message: "Error al añadir producto" });
+    }
+
     const newProduct = await Product.addProduct({
       name,
       brand,
@@ -51,6 +58,7 @@ async function add(req, res) {
       category,
       urlimg,
       codesat,
+      id_facturapi: productFacturapi.id
     });
 
     res.status(201).json({
