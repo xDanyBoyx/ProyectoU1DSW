@@ -10,12 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@radix-ui/react-label": "2.1.7",
-    "@radix-ui/react-slot": "1.2.3",
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-separator": "^1.1.7",
+    "@radix-ui/react-slot": "^1.2.3",
     "@tailwindcss/vite": "4.1.16",
     "axios": "1.13.1",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
+    "dotenv": "^17.2.3",
     "lucide-react": "0.548.0",
     "react": "19.1.1",
     "react-dom": "19.1.1",
