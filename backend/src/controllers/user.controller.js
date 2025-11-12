@@ -59,7 +59,7 @@ async function add(req, res) {
 
     const existing = await UserModel.findByMail(mail);
     if (existing) {
-      return res.status(409).json({ message: "El correo ya está registrado" });
+      return res.status(409).json({ errors: { mail: "El correo ya está registrado" } });
     }
 
     const customerFacturapi = await createFacturapiCustomer(req.body);

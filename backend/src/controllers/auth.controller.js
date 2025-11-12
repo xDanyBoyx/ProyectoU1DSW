@@ -31,7 +31,7 @@ async function register(req, res) {
 
     const existing = await UserModel.findByMail(mail);
     if (existing) {
-      return res.status(409).json({ message: "El correo ya está registrado" });
+      return res.status(409).json({ errors: { mail: "El correo ya está registrado" } });
     }
 
     const customerFacturapi = await createFacturapiCustomer(req.body);
@@ -82,13 +82,13 @@ async function login(req, res) {
   const user = await UserModel.findByMail(mail);
 
   if (!user) {
-    return res.status(401).json({ message: "Credenciales inválidas" }); // no se encontró el usuario por email
+    return res.status(401).json({ message: "Credenciales inválidas." }); // no se encontró el usuario por email
   }
 
   const match = await bcrypt.compare(password, user.password);
 
   if (!match) {
-    return res.status(401).json({ message: "Credenciales inválidas" });
+    return res.status(401).json({ message: "Credenciales inválidas." });
   }
 
   const token = jwt.sign(
