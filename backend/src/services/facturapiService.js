@@ -71,7 +71,8 @@ export const createFacturapiCustomer = async ({
         return customer;
     } catch (error) {
         console.error('❌ Error al crear cliente en Facturapi: ', error);
-        return null;
+        const errorMessage = error.message || 'Error desconocido en el servicio de facturación.';
+        throw new Error(errorMessage);
     }
 };
 

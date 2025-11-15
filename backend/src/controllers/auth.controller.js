@@ -35,10 +35,6 @@ async function register(req, res) {
     }
 
     const customerFacturapi = await createFacturapiCustomer(req.body);
-    
-    if (!customerFacturapi) {
-      return res.status(500).json({ message: "Error al crear usuario" });
-    }
 
     const newUser = await UserModel.addUser({
       name,
@@ -67,6 +63,9 @@ async function register(req, res) {
       },
     });
   } catch (error) {
+    if (error.message === 'El campo "tax_id" es obligatorio y debe ser un RFC válido') {
+      return res.status(500).json({ errors: {rfc: 'El RFC no es válido.'} });
+    }
     return res.status(500).json({ message: error.message });
   }
 

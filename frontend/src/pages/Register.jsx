@@ -3,10 +3,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
     Card,
+    CardFooter,
     CardContent,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { Separator } from "../components/ui/separator.jsx";
 import {
     Select,
     SelectContent,
@@ -14,16 +16,19 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
+import { toast } from "sonner"
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { EyeIcon, EyeOffIcon, ArrowLeft, ArrowRight, Loader2, AlertCircleIcon, CheckCircle2 } from 'lucide-react'
+import { NavLink, useNavigate } from "react-router-dom";
+import { EyeIcon, EyeOffIcon, ArrowLeft, ArrowRight, Loader2, AlertCircleIcon, CheckCircle2, X } from 'lucide-react'
 import { capitalizeFirstLetter } from '../lib/utils.js';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import axios from "../axiosConfig.js";
+import CustomToast from '../components/CustomToast.jsx';
 import {
     Alert,
-    AlertTitle
+    AlertTitle,
+    AlertDescription
 } from "@/components/ui/alert";
 
 const Register = () => {
@@ -34,6 +39,12 @@ const Register = () => {
     const togglePasswordVisibility = () => setIsPasswordVisible(prevState => !prevState);
 
     const [isLoading, setIsLoading] = useState(false);
+
+    const [estados, setEstados] = useState([]);
+    const [municipiosPorEstado, setMunicipiosPorEstado] = useState({});
+    const [regimenesFiscales, setRegimenesFiscales] = useState([]);
+    const [errors, setErrors] = useState([]);
+    const [usuarioCreado, setUsuarioCreado] = useState(false);
 
     const [dataForm, setDataForm] = useState({
         name: '',
@@ -52,12 +63,6 @@ const Register = () => {
         rfc: '',
         rf: ''
     });
-
-    const [estados, setEstados] = useState([]);
-    const [municipiosPorEstado, setMunicipiosPorEstado] = useState({});
-    const [regimenesFiscales, setRegimenesFiscales] = useState([]);
-    const [errors, setErrors] = useState([]);
-    const [usuarioCreado, setUsuarioCreado] = useState(false);
 
     const municipios =
         municipiosPorEstado[
@@ -92,7 +97,6 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrors([]);
         setUsuarioCreado(false);
         if (!isLastTab) {
             nextTab(); // Ir a la siguiente tab si no es la última
@@ -103,10 +107,23 @@ const Register = () => {
             await axios.post('/auth/register', dataForm);
             setUsuarioCreado(true);
             setTimeout(() => {
-                navigate('/login');
+                navigate('/'); // navegar a la página de inicio de sesión
             }, 3000);
         } catch (error) {
-            setErrors(error.response.data.errors);
+            const respuesta = error.response.data;
+            if (respuesta.errors) {
+                setErrors(respuesta.errors);
+                return;
+            }
+            const errorMessage = respuesta.message || 'Ocurrió un error inesperado.';
+            toast.custom((t) => (
+                <CustomToast
+                    t={t}
+                    type="error"
+                    title="Error de registro"
+                    message={errorMessage}
+                />
+            ));
         } finally {
             setIsLoading(false);
         }
@@ -425,8 +442,8 @@ const Register = () => {
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectGroup>
-                                                    {municipios.map((municipio) => (
-                                                        <SelectItem key={municipio} value={municipio}>
+                                                    {municipios.map((municipio, index) => (
+                                                        <SelectItem key={index} value={municipio}>
                                                             {municipio}
                                                         </SelectItem>
                                                     ))}
@@ -466,18 +483,21 @@ const Register = () => {
                     {Object.keys(errors).length > 0 && (
                         <Alert variant="destructive" className="bg-red-50 border border-red-200 rounded-lg mt-4">
                             <AlertCircleIcon />
-                            <AlertTitle>Errores en el formulario, por favor revisalos.</AlertTitle>
+                            <AlertTitle>Errores en el formulario, por favor reviselos.</AlertTitle>
                         </Alert>
                     )}
 
                     {usuarioCreado && (
-                        <Alert className="bg-emerald-50 border border-emerald-200 rounded-lg mt-4">
-                            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                            <AlertTitle className="text-emerald-800 font-semibold">
-                                ¡Usuario creado exitosamente!
+                        <Alert className="bg-emerald-50 border border-emerald-200 rounded-lg mt-4 text-center">
+                            <AlertTitle className="text-emerald-800 font-semibold flex gap-2 items-center justify-center">
+                                <CheckCircle2 className="h-4 w-4 shrink-0" />
+                                <span>¡Usuario creado exitosamente!</span>
                             </AlertTitle>
                             <AlertDescription className="text-emerald-700 mt-1">
                                 Tu registro se ha completado correctamente. Redirigiendo a la página de inicio de sesión...
+                                <div className="flex justify-center mt-2 w-full">
+                                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                                </div>
                             </AlertDescription>
                         </Alert>
                     )}
@@ -523,6 +543,20 @@ const Register = () => {
                         )}
                     </div>
                 </CardContent>
+
+                <Separator className="" />
+
+                <CardFooter className="flex justify-center">
+                    <p className="text-sm text-gray-600 text-center">
+                        ¿Ya tienes una cuenta?{' '}
+                        <NavLink
+                            to="/"
+                            className="font-semibold text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+                        >
+                            Inicia sesión aquí
+                        </NavLink>
+                    </p>
+                </CardFooter>
             </Card>
         </main>
     );
