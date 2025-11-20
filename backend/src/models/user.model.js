@@ -55,8 +55,8 @@ async function findById(userId) {
         domicile: snapshot.data().domicile,
         role: snapshot.data().role,
         rfc: snapshot.data().rfc,
-        rf: doc.data().rf,
-        phone: doc.data().phone,
+        rf: snapshot.data().rf,
+        phone: snapshot.data().phone,
         //password: snapshot.data().password,
         id_facturapi: snapshot.data().id_facturapi,
       }
@@ -77,6 +77,8 @@ async function findByMail(mail) {
     const data = docSnap.data();
     return {
       id: docSnap.id,
+      mail: data.mail,
+      role: data.role,
       password: data.password, // importante para verificar contraseña en api de login
     };
   } catch (error) {

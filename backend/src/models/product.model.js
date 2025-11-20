@@ -117,24 +117,24 @@ async function updateProduct(productId, data) {
     if (!existingProduct) return null;
 
     const productRef = doc(productsCollection, productId);
-    
+
     // Crear objeto solo con los campos definidos
     const updatedData = {};
-    
+
     if (data.name !== undefined) updatedData.name = data.name;
     if (data.brand !== undefined) updatedData.brand = data.brand;
     if (data.stock !== undefined) updatedData.stock = data.stock;
     if (data.price !== undefined) updatedData.price = data.price;
     if (data.category !== undefined) updatedData.category = data.category;
     if (data.urlimg !== undefined) updatedData.urlimg = data.urlimg;
-    
+
     // Verificar que hay campos para actualizar
     if (Object.keys(updatedData).length === 0) {
       return existingProduct; // No hay cambios
     }
 
     await updateDoc(productRef, updatedData);
-    
+
     return {
       id: productId,
       billid: existingProduct.billid,
@@ -157,7 +157,7 @@ async function deleteProduct(productId) {
     const productRef = doc(productsCollection, productId);
     const snapshot = await getDoc(productRef);
     if (!snapshot.exists()) return false;
-    
+
     await deleteDoc(productRef);
     return true;
   } catch (error) {
@@ -211,6 +211,28 @@ async function filterProduct(filter = {}) {
   }
 }
 
+const getProductsPriceByIds = async (productIds) => {
+
+  try {
+    const products = [];
+    for (const productId of productIds) {
+      const product = await findById(productId);
+      if (product) {
+        products.push(
+          {
+            id: product.id,
+            price: product.price
+          }
+        );
+      }
+    }
+    return products;
+  } catch (error) {
+    console.error("❌ Error en archivo product.model.js función getProductsPriceByIds: ", error);
+    throw new Error("Error al consultar los precios de los productos.");
+  }
+};
+
 // EXPORTAR FUNCIONES (ESM)
 export default {
   findAll,
@@ -219,4 +241,5 @@ export default {
   updateProduct,
   deleteProduct,
   filterProduct,
+  getProductsPriceByIds
 };

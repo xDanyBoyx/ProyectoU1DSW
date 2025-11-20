@@ -5,7 +5,7 @@ import { createFacturapiProducto } from "../services/facturapiService.js";
 //GET ALL
 async function getAll(req, res) {
   const filters = req.query;
-
+  
   try {
     if (Object.keys(filters).length > 0) {
       const data = await Product.filterProduct(filters);

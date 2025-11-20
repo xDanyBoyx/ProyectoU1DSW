@@ -13,6 +13,8 @@ export function authenticate(req, res, next) {
   try {
     const payload = jwt.verify(token, JWT_SECRET);
     req.userId = payload.id; // Se puede usar para futuras consultas
+    req.userRole = payload.role;
+    req.userMail = payload.mail;
     next();
   } catch (err) {
     return res.status(401).json({ message: "Token inválido o expirado" });
