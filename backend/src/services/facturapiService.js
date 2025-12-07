@@ -76,6 +76,59 @@ export const createFacturapiCustomer = async ({
     }
 };
 
+export const removeFacturapiCustomer = async (id) => {
+    const facturapi = facturapiService.getFacturapi();
+
+    try {
+        // primero se verifica si existe el usuario en facturapi
+        const customer = await facturapi.customers.retrieve(id);
+
+        if (!customer.id) return null; // no se encontró en facturapi
+
+        const removedCustomer = await facturapi.customers.del(id);
+        return removedCustomer;
+    } catch (error) {
+        console.error('❌ Error al eliminar cliente en Facturapi: ', error);
+        return null;
+    }
+};
+
+export const updateFacturapiCustomer = async ({ id, data }) => {
+    const facturapi = facturapiService.getFacturapi();
+    try {
+        // primero se verifica si existe el usuario en facturapi
+        const customer = await facturapi.customers.retrieve(id);
+
+        if (!customer.id) return null; // no se encontró en facturapi
+
+        const updatedCustomer = await facturapi.customers.update(
+            id,
+            {
+                legal_name: data.name ?? customer.legal_name, // Nombre o razón social
+                tax_id: data.rfc ?? customer.tax_id, // RFC
+                tax_system: data.rf ?? customer.tax_system, // Regimen fiscal
+                email: data.mail ?? customer.email, // Correo para envío (opcional).
+                phone: data.phone ?? customer.phone,
+                address: {
+                    zip: data.domicile?.cp ?? customer.address.zip,
+                    street: data.domicile?.calle ?? customer.address.street,
+                    exterior: data.domicile?.numeroExt ?? customer.address.exterior,
+                    neighborhood: data.domicile?.colonia ?? customer.address.neighborhood,
+                    city: data.domicile?.ciudad ?? customer.address.city,
+                    municipality: data.domicile?.municipio ?? customer.address.municipality,
+                    state: data.domicile?.estado ?? customer.address.state,
+                }
+            }
+        );
+
+        return updatedCustomer;
+
+    } catch (error) {
+        console.error('❌ Error al actualizar cliente en Facturapi: ', error);
+        return null;
+    }
+}
+
 export const createFacturapiProducto = async ({
     name,
     price,

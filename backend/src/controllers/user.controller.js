@@ -1,6 +1,10 @@
-import { validateUser } from "../utils/validations.js";
+import { validateUser, validateUserUpdate } from "../utils/validations.js";
 import UserModel from "../models/user.model.js";
-import { createFacturapiCustomer } from "../services/facturapiService.js";
+import {
+  createFacturapiCustomer,
+  removeFacturapiCustomer,
+  updateFacturapiCustomer,
+} from "../services/facturapiService.js";
 
 //GET ALL
 async function getAll(req, res) {
@@ -105,7 +109,7 @@ async function add(req, res) {
 async function update(req, res) {
   const id = req.params.id;
 
-  const errors = validateUser(req.body);
+  const errors = validateUserUpdate(req.body);
   if (errors) {
     return res.status(400).json({
       errors,
@@ -113,6 +117,24 @@ async function update(req, res) {
   }
 
   try {
+
+    const existing = await UserModel.findById(id);
+
+    if (!existing) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+
+    const { id_facturapi } = existing;
+
+    const updatedFacturapiCustomer = await updateFacturapiCustomer({
+      id: id_facturapi,
+      data: req.body
+    });
+
+    if (!updatedFacturapiCustomer.id) {
+      return res.status(500).json({ message: "Error al actualizar usuario" });
+    }
+
     const updatedUser = await UserModel.updateUser(id, req.body);
     if (!updatedUser)
       return res.status(404).json({ error: "Usuario no encontrado" });
@@ -127,6 +149,21 @@ async function update(req, res) {
 async function remove(req, res) {
   try {
     const id = req.params.id;
+
+    const existing = await UserModel.findById(id);
+
+    if (!existing) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+
+    const { id_facturapi } = existing;
+
+    const removedFacturapiCustomer = await removeFacturapiCustomer(id_facturapi);
+
+    if (!removedFacturapiCustomer.id) {
+      return res.status(500).json({ message: "Error al eliminar usuario" });
+    }
+
     const ok = await UserModel.deleteUser(id);
     if (!ok) return res.status(404).json({ error: "Usuario no encontrado" });
     res.status(200).json({ message: "Usuario eliminado correctamente" });

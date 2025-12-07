@@ -146,9 +146,23 @@ async function updateUser(userId, data) {
 
     if (data.mail !== undefined) updatedData.mail = data.mail;
     if (data.name !== undefined) updatedData.name = data.name;
-    if (data.role !== undefined) updatedData.role = data.role;
-    if (data.domicile !== undefined) updatedData.domicile = data.domicile;
     if (data.rfc !== undefined) updatedData.rfc = data.rfc;
+    if (data.rf !== undefined) updatedData.rf = data.rf;
+    if (data.phone !== undefined) updatedData.phone = data.phone;
+
+    // Manejar domicilio con MERGE (no reemplazo completo)
+    if (data.domicile !== undefined) {
+      // Si el usuario tiene domicilio existente, hacer merge
+      if (existingUser.domicile && typeof existingUser.domicile === 'object') {
+        updatedData.domicile = {
+          ...existingUser.domicile,  // Mantener valores existentes
+          ...data.domicile           // Aplicar nuevos valores
+        };
+      } else {
+        // Si no existe domicilio anterior, usar el nuevo
+        updatedData.domicile = data.domicile;
+      }
+    }
 
     // Manejar password solo si se proporciona
     if (data.password) {
@@ -157,22 +171,27 @@ async function updateUser(userId, data) {
 
     // Verificar que hay campos para actualizar
     if (Object.keys(updatedData).length === 0) {
-      return existingUser; // No hay cambios
+      const { password, ...userWithoutPassword } = existingUser;
+      return userWithoutPassword;
     }
 
     await updateDoc(userRef, updatedData);
 
-    return {
+    // Combinar datos actualizados con existentes para la respuesta
+    const userResponse = {
       id: userId,
       mail: updatedData.mail ?? existingUser.mail,
       name: updatedData.name ?? existingUser.name,
-      role: updatedData.role ?? existingUser.role,
+      role: existingUser.role, // role no se actualiza
       domicile: updatedData.domicile ?? existingUser.domicile,
       rfc: updatedData.rfc ?? existingUser.rfc,
       rf: updatedData.rf ?? existingUser.rf,
       phone: updatedData.phone ?? existingUser.phone,
       id_facturapi: existingUser.id_facturapi
     };
+
+    return userResponse;
+
   } catch (error) {
     console.error("❌ Error en archivo user.model.js función updateUser: ", error);
     throw new Error("Error al actualizar el usuario.");
