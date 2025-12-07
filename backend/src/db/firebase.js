@@ -28,4 +28,7 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firestore
 const db = getFirestore(app);
 
+// Log successful connection
+console.log("Conexión a Firebase exitosa 🔥");
+
 export { db };
