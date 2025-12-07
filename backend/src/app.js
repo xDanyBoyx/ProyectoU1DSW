@@ -1,5 +1,5 @@
 import express from "express";
-import dotenv from "dotenv";
+//import dotenv from "dotenv";
 import cors from "cors";
 import userRoutes from "./routes/user.routes.js";
 import productRoutes from "./routes/product.routes.js";
@@ -7,7 +7,7 @@ import authRoutes from "./routes/auth.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
 import { authenticate } from "./middleware/auth.middleware.js";
 
-dotenv.config();
+//dotenv.config();
 
 const app = express();
 
@@ -29,5 +29,5 @@ app.use("/api/cart", authenticate, cartRoutes);
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT} 🚀`);
 });
