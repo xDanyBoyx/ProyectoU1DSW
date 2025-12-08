@@ -191,7 +191,8 @@ const addProductsToCart = async (req, res) => {
 
         // verificar que los productos que se quieren agregar ya existen en el carrito
         const updatedProducts = [...currentCart.products];
-        newProducts.forEach(async (p) => {
+        // Usar for...of para awaitear correctamente las llamadas asíncronas
+        for (const p of newProducts) {
             const existingProductIndex = updatedProducts.findIndex(up => up.product.id === p.id);
             if (existingProductIndex !== -1) {
                 updatedProducts[existingProductIndex].qty += p.qty;
@@ -199,7 +200,6 @@ const addProductsToCart = async (req, res) => {
             } else {
                 // agregar nuevo producto al carrito
                 const productPrice = await productModel.getProductsPriceByIds([p.id]);
-                
                 updatedProducts.push({
                     product: {
                         id: p.id,
@@ -209,7 +209,7 @@ const addProductsToCart = async (req, res) => {
                     subtotal: productPrice[0].price * p.qty
                 });
             }
-        });
+        }
 
         // recalcular subtotal, iva y total
         const subtotal = updatedProducts.reduce((acumulador, item) => acumulador + item.subtotal, 0);
