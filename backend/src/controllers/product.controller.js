@@ -1,6 +1,10 @@
-import { validateProduct } from "../utils/validations.js";
+import { validateProduct, validateProductUpdate } from "../utils/validations.js";
 import Product from "../models/product.model.js";
-import { createFacturapiProducto } from "../services/facturapiService.js";
+import { 
+  createFacturapiProducto,
+  removeFacturapiProducto,
+  updateFacturapiProducto
+ } from "../services/facturapiService.js";
 
 //GET ALL
 async function getAll(req, res) {
@@ -74,7 +78,7 @@ async function add(req, res) {
 async function update(req, res) {
   const id = req.params.id;
 
-  const errors = validateProduct(req.body);
+  const errors = validateProductUpdate(req.body);
   if (errors) {
     return res.status(400).json({
       errors,
@@ -82,6 +86,24 @@ async function update(req, res) {
   }
 
   try {
+
+    const existing = await Product.findById(id);
+
+    if (!existing) { 
+      return res.status(404).json({ error: "Producto no encontrado" });
+    }
+
+    const { id_facturapi } = existing;
+
+    const updatedFacturapiProduct = await updateFacturapiProducto({
+      id: id_facturapi,
+      data: req.body
+    });
+
+    if (!updatedFacturapiProduct.id) {
+      return res.status(500).json({ message: "Error al actualizar producto" });
+    }
+
     const updatedProduct = await Product.updateProduct(id, req.body);
     if (!updatedProduct)
       return res.status(404).json({ error: "Producto no encontrado" });
@@ -96,6 +118,21 @@ async function update(req, res) {
 async function remove(req, res) {
   try {
     const id = req.params.id;
+
+    const existing = await Product.findById(id);
+
+    if (!existing) {
+      return res.status(404).json({ error: "Producto no encontrado" });
+    }
+
+    const { id_facturapi } = existing;
+
+    const removedFacturapiProduct = await removeFacturapiProducto(id_facturapi);
+
+    if (!removedFacturapiProduct.id) {
+      return res.status(500).json({ message: "Error al eliminar producto" });
+    }
+
     const ok = await Product.deleteProduct(id);
     if (!ok) return res.status(404).json({ error: "Producto no encontrado" });
     res.status(200).json({ message: "Producto eliminado correctamente" });

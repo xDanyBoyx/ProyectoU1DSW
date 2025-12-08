@@ -151,7 +151,49 @@ export const createFacturapiProducto = async ({
         });
         return product;
     } catch (error) {
-        console.error('❌ Error al crear producto en Facturapi: ', error);
+        console.error('❌ Error al crear producto en Facturapi: ', error.message);
         return null;
     }
 };
+
+export const removeFacturapiProducto = async (id) => {
+    const facturapi = facturapiService.getFacturapi();
+    try {
+        // primero se verifica si existe el producto en facturapi
+        const product = await facturapi.products.retrieve(id);
+
+        if (!product.id) return null; // no se encontró en facturapi
+
+        const removedProduct = await facturapi.products.del(id);
+        return removedProduct;
+    } catch (error) {
+        console.error('❌ Error al eliminar producto en Facturapi: ', error);
+        return null;
+    }
+
+}
+
+export const updateFacturapiProducto = async ({ id, data }) => {
+    const facturapi = facturapiService.getFacturapi();
+    try {
+        // primero se verifica si existe el producto en facturapi
+        const product = await facturapi.products.retrieve(id);
+
+        if (!product.id) return null; // no se encontró en facturapi
+
+        const updatedProduct = await facturapi.products.update(
+            id,
+            {
+                description: data.name ?? product.description,
+                product_key: data.codesat ?? product.product_key,
+                price: data.price ?? product.price,
+                //unit_key: ?  al parecer este atributo no es necesario. no lo fue :D
+            });
+
+        return updatedProduct;
+
+    } catch (error) {
+        console.error('❌ Error al actualizar cliente en Facturapi: ', error);
+        return null;
+    }
+}

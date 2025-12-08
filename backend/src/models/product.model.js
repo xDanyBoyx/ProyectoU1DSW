@@ -127,6 +127,7 @@ async function updateProduct(productId, data) {
     if (data.price !== undefined) updatedData.price = data.price;
     if (data.category !== undefined) updatedData.category = data.category;
     if (data.urlimg !== undefined) updatedData.urlimg = data.urlimg;
+    if (data.codesat !== undefined) updatedData.codesat = data.codesat;
 
     // Verificar que hay campos para actualizar
     if (Object.keys(updatedData).length === 0) {
@@ -137,7 +138,8 @@ async function updateProduct(productId, data) {
 
     return {
       id: productId,
-      billid: existingProduct.billid,
+      id_facturapi: existingProduct.id_facturapi,
+      codesat: updatedData.codesat ?? existingProduct.codesat,
       name: updatedData.name ?? existingProduct.name,
       brand: updatedData.brand ?? existingProduct.brand,
       stock: updatedData.stock ?? existingProduct.stock,
