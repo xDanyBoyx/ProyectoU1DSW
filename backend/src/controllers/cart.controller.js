@@ -159,7 +159,7 @@ const getAllCarts = async (req, res) => {
 // TODO: obtener el carrito activo del usuario, requiere autenticación
 // carrito no pagado, osea cuando paidAt es null
 const getCurrentCart = async (req, res) => {
-    const { userId, userRole, userMail} = req;
+    const { userId, userRole, userMail } = req;
     try {
         const user = await userModel.findById(userId);
         if (!user) {
@@ -169,7 +169,7 @@ const getCurrentCart = async (req, res) => {
             return res.status(403).json({ message: "Solo los usuarios con rol de 'cliente' pueden tener un carrito." });
         }
         const cart = await cartModel.getCurrentCart(userId);
-    
+
         return res.status(201).json(cart);
 
     } catch (error) {
@@ -203,7 +203,7 @@ const addProductsToCart = async (req, res) => {
                 updatedProducts.push({
                     product: {
                         id: p.id,
-                        price: productPrice[0].price 
+                        price: productPrice[0].price
                     },
                     qty: p.qty,
                     subtotal: productPrice[0].price * p.qty
@@ -224,7 +224,7 @@ const addProductsToCart = async (req, res) => {
         };
 
         const updatedCart = await cartModel.updateCart(currentCart.id, updatedCartData);
-        
+
         if (!updatedCart) {
             return res.status(500).json({ message: "Error al actualizar el carrito." });
         }
@@ -238,7 +238,7 @@ const addProductsToCart = async (req, res) => {
 
 const updateQtyProductInCart = async (req, res) => {
     const { userId } = req;
-    const {productId} = req.params;
+    const { productId } = req.params;
     const { qty } = req.body;
     try {
         const currentCart = await cartModel.getCurrentCart(userId);
@@ -274,7 +274,7 @@ const updateQtyProductInCart = async (req, res) => {
 
 const removeProductFromCart = async (req, res) => {
     const { userId } = req;
-    const {productId} = req.params;
+    const { productId } = req.params;
     try {
         const currentCart = await cartModel.getCurrentCart(userId);
         if (!currentCart) {
@@ -321,6 +321,19 @@ const clearCart = async (req, res) => {
         return res.status(200).json(updatedCart);
     } catch (error) {
         return res.status(500).json({ message: error.message });
+    }
+}
+
+const payCart = async (req, res) => {
+    const { userId, userRole, userMail } = req;
+    const {cartId} = req.params;
+    
+    try {
+
+        
+
+    } catch (error) {
+
     }
 }
 
