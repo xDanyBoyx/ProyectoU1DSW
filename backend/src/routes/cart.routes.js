@@ -11,6 +11,7 @@ router.get('/all', controller.getAllCarts);
 router.post('/products/:productId', controller.updateQtyProductInCart);
 router.delete('/products/:productId', controller.removeProductFromCart);
 router.delete('/clear', controller.clearCart);
+router.post('/pay', controller.payCart);
 
 
 export default router;

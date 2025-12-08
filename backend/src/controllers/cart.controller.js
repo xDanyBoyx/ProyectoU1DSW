@@ -1,6 +1,8 @@
 import userModel from "../models/user.model.js";
 import productModel from "../models/product.model.js";
 import cartModel from "../models/cart.model.js";
+import { createPaymentIntent } from "../services/stripeService.js";
+import { createFacturapiInvoice } from "../services/facturapiService.js";
 
 // METODO PARA CREAR UN NUEVO CARRITO CON INFORMACIÓN DEL USUARIO AUTENTICADO
 //DESCOMENTAR LA FUNCION CUANDO SE REQUIERA USAR LA AUTENTICACIÓN
@@ -193,7 +195,26 @@ const addProductsToCart = async (req, res) => {
         const updatedProducts = [...currentCart.products];
         // Usar for...of para awaitear correctamente las llamadas asíncronas
         for (const p of newProducts) {
+
+            const productInfo = await productModel.findById(p.id);
+
+            if (!productInfo) {
+                return res.status(404).json({ message: `El producto con ID ${p.id} no existe.` });
+            }
+
             const existingProductIndex = updatedProducts.findIndex(up => up.product.id === p.id);
+            let totalQty = p.qty;
+
+            if (existingProductIndex !== -1) {
+                totalQty += updatedProducts[existingProductIndex].qty;
+            }
+
+            if (totalQty > productInfo.stock) {
+                return res.status(400).json({
+                    message: `Stock insuficiente para ${productInfo.name}. Disponible: ${productInfo.stock}, Solicitado: ${totalQty}`
+                });
+            }
+
             if (existingProductIndex !== -1) {
                 updatedProducts[existingProductIndex].qty += p.qty;
                 updatedProducts[existingProductIndex].subtotal = updatedProducts[existingProductIndex].product.price * updatedProducts[existingProductIndex].qty;
@@ -240,6 +261,11 @@ const updateQtyProductInCart = async (req, res) => {
     const { userId } = req;
     const { productId } = req.params;
     const { qty } = req.body;
+
+    if (!qty || qty <= 0) {
+        return res.status(400).json({ message: "La cantidad debe ser un número mayor a 0." });
+    }
+
     try {
         const currentCart = await cartModel.getCurrentCart(userId);
         if (!currentCart) {
@@ -248,8 +274,22 @@ const updateQtyProductInCart = async (req, res) => {
         const updatedProducts = [...currentCart.products];
         const existingProductIndex = updatedProducts.findIndex(up => up.product.id === productId);
         if (existingProductIndex === -1) {
-            return res.status(404).json({ message: "El producto no existe en el carrito." });
+            return res.status(404).json({ message: "El producto que intentas actualizar no existe en tu carrito." });
         }
+
+        const productInfo = await productModel.findById(productId);
+
+        if (!productInfo) {
+            // Caso raro: el producto estaba en el carrito pero fue borrado de la tienda
+            return res.status(404).json({ message: "El producto ya no se encuentra disponible en la tienda." });
+        }
+
+        if (qty > productInfo.stock) {
+            return res.status(400).json({
+                message: `Stock insuficiente. Solo quedan ${productInfo.stock} unidades disponibles de este producto.`
+            });
+        }
+
         updatedProducts[existingProductIndex].qty = qty;
         updatedProducts[existingProductIndex].subtotal = updatedProducts[existingProductIndex].product.price * qty;
         // recalcular subtotal, iva y total
@@ -326,14 +366,83 @@ const clearCart = async (req, res) => {
 
 const payCart = async (req, res) => {
     const { userId, userRole, userMail } = req;
-    const {cartId} = req.params;
-    
-    try {
 
-        
+    try {
+        const currentCart = await cartModel.getCurrentCart(userId);
+        if (!currentCart) {
+            return res.status(404).json({ message: "No hay carrito pendiente de pago." });
+        }
+
+        if (currentCart.products.length === 0){
+            return res.status(400).json({ message: "El carrito está vacío." });
+        }
+
+        const itemsForInvoice = [];
+
+        for (const item of currentCart.products) {
+            const product = await productModel.findById(item.product.id);
+            if (!product || product.stock < item.qty) {
+                return res.status(400).json({
+                    message: `Lo sentimos, el producto ${product.name} ya no tiene stock suficiente. Actualiza tu carrito.`
+                });
+            }
+
+            if (!product.id_facturapi) {
+                return res.status(400).json({
+                    message: `El producto ${product.name} no está configurado para facturación.`
+                });
+            }
+
+            // Preparamos el item para la factura
+            itemsForInvoice.push({
+                productId: product.id_facturapi, // ID de Facturapi
+                qty: item.qty
+            });
+        }
+
+        // intento de pago usando Stripe
+        const paymentIntent = await createPaymentIntent(userId, currentCart.id, currentCart.total);
+
+        if (!paymentIntent) {
+            return res.status(500).json({ message: "Error al iniciar el proceso de pago." });
+        }
+
+        // descontar stock en la BD
+        for (const item of currentCart.products) {
+            const product = await productModel.findById(item.product.id);
+            const newStock = product.stock - item.qty;
+            await productModel.updateProduct(item.product.id, { stock: newStock });
+        }
+
+        // generar factura con facturapi
+        const factura = await createFacturapiInvoice(currentCart.user.id_facturapi, itemsForInvoice);
+
+        // cerrar el carrito (Establecer paidAt)
+        const updatedCart = await cartModel.updateCart(currentCart.id, {
+            paidAt: new Date(),
+            id_stripe: paymentIntent.id,
+            id_facturapi: factura ? factura.id : null
+        });
+
+        const responseData = {
+            message: "Pago realizado con éxito.",
+            cart: updatedCart,
+            paymentIntent,
+            facturaStatus: factura ? "created" : "failed"
+        };
+
+        // if (invoice) {
+        //     // Opcional: Mandar la URL de descarga del PDF/XML al frontend
+        //     responseData.invoiceUrl = invoice.verification_url;
+        // } else {
+        //     responseData.warning = "El pago fue exitoso pero hubo un error generando la factura automática.";
+        // }
+
+        return res.status(200).json(responseData);
 
     } catch (error) {
-
+        console.error("Error en payCart:", error);
+        return res.status(500).json({ message: error.message });
     }
 }
 
@@ -344,5 +453,6 @@ export default {
     addProductsToCart,
     updateQtyProductInCart,
     removeProductFromCart,
-    clearCart
+    clearCart,
+    payCart,
 };  

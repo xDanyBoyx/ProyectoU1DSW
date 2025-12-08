@@ -197,3 +197,26 @@ export const updateFacturapiProducto = async ({ id, data }) => {
         return null;
     }
 }
+
+export const createFacturapiInvoice = async (idCustomer, items) => {
+    const facturapi = facturapiService.getFacturapi();
+    try {
+        const lineItems = items.map(item => ({
+            quantity: item.qty,
+            product: item.productId
+        }));
+
+        const invoice = await facturapi.invoices.create({
+            customer: idCustomer,
+            items: lineItems,
+            payment_form: '03', //  Forma de pago: Transferencia electrónica
+            use: 'G01', // Uso del CFDI: Adquisición de mercancías
+        });
+
+        return invoice;
+
+    } catch (error) {
+        console.error('❌ Error al crear factura en Facturapi: ', error.message);
+        return null;
+    }
+}
