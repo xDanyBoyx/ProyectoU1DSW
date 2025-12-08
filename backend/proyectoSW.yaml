@@ -1,15 +1,16 @@
 type: collection.insomnia.rest/5.0
+schema_version: "5.1"
 name: proyectoSW
 meta:
-  id: wrk_fa0157c79d58436caae2e6ff0f88dd8e
-  created: 1761629574061
-  modified: 1761647634465
+  id: wrk_a4fb672b510d4cac8bfa3e9b2e90ed77
+  created: 1765140262663
+  modified: 1765140262663
   description: ""
 collection:
   - url: http://localhost:3000/api/users
     name: GET ALL USERS
     meta:
-      id: req_416ac0d5473340029bb3101f0ca0a8d0
+      id: req_600fa25455a64dc4987d3104c210ea3b
       created: 1761629574076
       modified: 1763611968009
       isPrivate: false
@@ -39,7 +40,7 @@ collection:
   - url: http://localhost:3000/api/users/adfecdaa-6a67-46d4-9584-73ee696fbd92
     name: GET USER BY ID
     meta:
-      id: req_d03b4c4c004e42048d2369bdfb1dcffa
+      id: req_439ecf8d0a934ef8956582f081180ca7
       created: 1761631559384
       modified: 1763601838317
       isPrivate: false
@@ -51,8 +52,8 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
-      prefix: Bearer
       token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxNjQ4NDkyLCJleHAiOjE3NjE2NTIwOTJ9.tVjJzfvg4UhZw3iL5cs7veI7Z5BAGeot6Y0I6MSSFpw
+      prefix: Bearer
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -64,9 +65,9 @@ collection:
   - url: http://localhost:3000/api/auth/register
     name: REGISTER USER
     meta:
-      id: req_2e56ed3c04554b1882f5cf4329566a74
+      id: req_b367cfc747994840b6ca701021a3dfb2
       created: 1761635073356
-      modified: 1763599842969
+      modified: 1765141484543
       isPrivate: false
       description: ""
       sortKey: -1760570279931.25
@@ -87,9 +88,9 @@ collection:
                 		"colonia": "Ecologistas",
                 		"ciudad": "tepic",
                 		"municipio": "tepic",
-                		"estado": "tepic"
+                		"estado": "Nayarit"
                 	},
-                	"rfc": "MIJF010719D69",
+                	"rfc": "ABC101010111",
                 	"role": "cliente"
                 }
     headers:
@@ -112,7 +113,7 @@ collection:
   - url: http://localhost:3000/api/auth/login
     name: LOGIN USER
     meta:
-      id: req_848de71f2e364dd28977b8f224f5e2c4
+      id: req_288e73abca434cf293d22cbc4b2c966f
       created: 1761638692225
       modified: 1761648635690
       isPrivate: false
@@ -133,8 +134,8 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
-      prefix: Bearer
       token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxNjQ4NDkyLCJleHAiOjE3NjE2NTIwOTJ9.tVjJzfvg4UhZw3iL5cs7veI7Z5BAGeot6Y0I6MSSFpw
+      prefix: Bearer
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -146,7 +147,7 @@ collection:
   - url: http://localhost:3000/api/users/
     name: ADD USER (IGUAL QUE REGISTER)
     meta:
-      id: req_1c42b394d98b4736b7b2b1679e86da10
+      id: req_590dd38155b0471ca819d1d0849601c6
       created: 1761639555584
       modified: 1761648647448
       isPrivate: false
@@ -170,8 +171,8 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
-      prefix: Bearer
       token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxNjQ4NDkyLCJleHAiOjE3NjE2NTIwOTJ9.tVjJzfvg4UhZw3iL5cs7veI7Z5BAGeot6Y0I6MSSFpw
+      prefix: Bearer
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -180,12 +181,12 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:3000/api/users/3e8816c5-f6c1-461c-8567-24af968fd7f2
+  - url: http://localhost:3000/api/users/d20176a4-85c9-4f01-9609-25e287db2db5
     name: UPDATE USER
     meta:
-      id: req_80d021be3cba414184b0128e3b94074e
+      id: req_9e5b7007cd6048c498770e20321c961a
       created: 1761640525375
-      modified: 1761648666534
+      modified: 1765148827804
       isPrivate: false
       description: ""
       sortKey: -1760261319139.0312
@@ -194,12 +195,13 @@ collection:
       mimeType: application/json
       text: |-
         {
-        	"name": "Javier EDITADO" ,
-        	"password": "1234561",
-        	"mail": "prueba@gmail.comEDITADO",
-        	"domicile": "Av. Tepic Xalist #12EDITADO",
-        	"rfc": "HIJKL234fvdcEDITADO",
-        	"role": "admin"
+        	"name": "Franky Rivers",
+        	"mail": "admin@gmail.com",
+        	"domicile": {
+        		"calle": "Tucan"
+        	},
+        	"rfc": "ABC101010111"
+
         }
     headers:
       - name: Content-Type
@@ -208,8 +210,8 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
-      prefix: Bearer
       token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxNjQ4NDkyLCJleHAiOjE3NjE2NTIwOTJ9.tVjJzfvg4UhZw3iL5cs7veI7Z5BAGeot6Y0I6MSSFpw
+      prefix: Bearer
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -218,12 +220,12 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:3000/api/users/38e816c5-f6c1-461c-8567-24af968fd7f2
+  - url: http://localhost:3000/api/users/dbccc235-a34c-41a8-89ca-08740fa47d6a
     name: DELETE USER
     meta:
-      id: req_6ee7e1939e3545c8bb0e855365a8cd90
+      id: req_747129246bbd4aaeaa8f20b33de6850b
       created: 1761642751074
-      modified: 1761648690914
+      modified: 1765146435599
       isPrivate: false
       description: ""
       sortKey: -1760239250511.0156
@@ -233,8 +235,8 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
-      prefix: Bearer
       token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxNjQ4NDkyLCJleHAiOjE3NjE2NTIwOTJ9.tVjJzfvg4UhZw3iL5cs7veI7Z5BAGeot6Y0I6MSSFpw
+      prefix: Bearer
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -246,7 +248,7 @@ collection:
   - url: http://localhost:3000/api/users?name=ana
     name: GET ALL USERS FILTERS
     meta:
-      id: req_3495bb58a77d427c8ada05c6ebce1bca
+      id: req_e5f4c7febc9e474fb2fce45afd95906c
       created: 1761642984547
       modified: 1761648573974
       isPrivate: false
@@ -258,8 +260,8 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
-      prefix: Bearer
       token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxNjQ4NDkyLCJleHAiOjE3NjE2NTIwOTJ9.tVjJzfvg4UhZw3iL5cs7veI7Z5BAGeot6Y0I6MSSFpw
+      prefix: Bearer
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -271,9 +273,9 @@ collection:
   - url: http://localhost:3000/api/products
     name: GET ALL PRODUCTS
     meta:
-      id: req_cf96dab6157f402f85b8c807c5df4ef2
+      id: req_b95332cd7bbb46d0a26ac20f6b3c3f31
       created: 1761646797303
-      modified: 1763600718698
+      modified: 1765181072242
       isPrivate: false
       description: ""
       sortKey: -1761453025051.875
@@ -283,7 +285,7 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
-      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkZmVjZGFhLTZhNjctNDZkNC05NTg0LTczZWU2OTZmYmQ5MiIsIm1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50ZSIsImlhdCI6MTc2MzYwMDY3NywiZXhwIjoxNzYzNjA0Mjc3fQ.aXhVK_4pdVovTkbqwyuehM5udlAQkxL8Wrq6n2HhPyk
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDE3NmE0LTg1YzktNGYwMS05NjA5LTI1ZTI4N2RiMmRiNSIsIm1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50ZSIsImlhdCI6MTc2NTE4MTAxOSwiZXhwIjoxNzY1MTk1NDE5fQ.55cFeHYdWjHU6ehiE1eQktulx_zbJ8QDIq1b1pHIack
       prefix: Bearer
     settings:
       renderRequestBody: true
@@ -296,7 +298,7 @@ collection:
   - url: http://localhost:3000/api/products/046b0e32-fec2-49d6-a0d4-1090fd4c4185
     name: GET PRODUCT BY ID
     meta:
-      id: req_f5ad77dc0a5846d9bc3336bf4aa590e4
+      id: req_252b6af9a5cd4b9688a3e990d8833fd6
       created: 1761646853967
       modified: 1761648611190
       isPrivate: false
@@ -308,8 +310,8 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
-      prefix: Bearer
       token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxNjQ4NDkyLCJleHAiOjE3NjE2NTIwOTJ9.tVjJzfvg4UhZw3iL5cs7veI7Z5BAGeot6Y0I6MSSFpw
+      prefix: Bearer
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -321,7 +323,7 @@ collection:
   - url: http://localhost:3000/api/products?brand=hp
     name: GET ALL PRODUCTS FILTERS
     meta:
-      id: req_a25f44123eb14badbda19f6847f084fc
+      id: req_1e202d3a865b42a4910f9703bd277452
       created: 1761646912770
       modified: 1761648588318
       isPrivate: false
@@ -333,8 +335,8 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
-      prefix: Bearer
       token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxNjQ4NDkyLCJleHAiOjE3NjE2NTIwOTJ9.tVjJzfvg4UhZw3iL5cs7veI7Z5BAGeot6Y0I6MSSFpw
+      prefix: Bearer
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -346,23 +348,24 @@ collection:
   - url: http://localhost:3000/api/products/
     name: ADD PRODUCT
     meta:
-      id: req_0ab3372424f44b838a659ddf84dcaf1e
+      id: req_b3c307dc5c65449792dbc4bfb204a135
       created: 1761646988227
-      modified: 1761648657679
+      modified: 1765153227012
       isPrivate: false
       description: ""
       sortKey: -1760283387767.0469
     method: POST
     body:
       mimeType: application/json
-      text: |-
+      text: >-
         {
-          "name": "Iphone X 4 GB",
-          "brand": "Apple",
-          "stock": 1,
-          "price": 2000,
-          "category": "Celulares",
-          "codesat": "5020271112"
+          "name": "Mancuerna Ajustable 20kg",
+          "brand": "Proiron",
+          "stock": 30,
+          "price": 1299.99,
+          "category": "Deportes",
+          "urlimg": "https://m.media-amazon.com/images/I/61rdJmU9xCL._AC_SL1500_.jpg",
+          "codesat": "49201612"
         }
     headers:
       - name: Content-Type
@@ -371,8 +374,8 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
-      prefix: Bearer
       token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxNjQ4NDkyLCJleHAiOjE3NjE2NTIwOTJ9.tVjJzfvg4UhZw3iL5cs7veI7Z5BAGeot6Y0I6MSSFpw
+      prefix: Bearer
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -381,12 +384,12 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:3000/api/products/046b0e32-fec2-49d6-a0d4-1090fd4c4185
+  - url: http://localhost:3000/api/products/badc9a82-57ad-468c-9d3c-8fe0671545a0
     name: UPDATE PRODUCT
     meta:
-      id: req_13d4a14f792b4a0687ddc31e53598f8b
+      id: req_dd85c45ffe344acf9fa76c8a32ffd3f8
       created: 1761647343351
-      modified: 1761648675362
+      modified: 1765158370533
       isPrivate: false
       description: ""
       sortKey: -1760250284825.0234
@@ -395,9 +398,7 @@ collection:
       mimeType: application/json
       text: |-
         {
-          "name": "Coca Cola Light",
-          "price": 20.50,
-          "stock": 150
+          "price": 888888.1234
         }
     headers:
       - name: Content-Type
@@ -406,8 +407,8 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
-      prefix: Bearer
       token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxNjQ4NDkyLCJleHAiOjE3NjE2NTIwOTJ9.tVjJzfvg4UhZw3iL5cs7veI7Z5BAGeot6Y0I6MSSFpw
+      prefix: Bearer
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -416,12 +417,12 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:3000/api/products/ffe9114f-b871-43c1-9cb7-256ac01719d9
+  - url: http://localhost:3000/api/products/badc9a82-57ad-468c-9d3c-8fe0671545a0
     name: DELETE PRODUCTS
     meta:
-      id: req_7b3b661fa25f44f9a29928d1edc76cc0
+      id: req_8ca2d12de9b94a77bd78105f3888f006
       created: 1761647556645
-      modified: 1761648700960
+      modified: 1765179078883
       isPrivate: false
       description: ""
       sortKey: -1760228216197.0078
@@ -431,8 +432,8 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
-      prefix: Bearer
       token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxNjQ4NDkyLCJleHAiOjE3NjE2NTIwOTJ9.tVjJzfvg4UhZw3iL5cs7veI7Z5BAGeot6Y0I6MSSFpw
+      prefix: Bearer
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -444,9 +445,9 @@ collection:
   - url: http://localhost:3000/api/cart
     name: CREATE CART
     meta:
-      id: req_704fcf7d797643e29382144312439eb1
+      id: req_956803e0208b414181838afd5bbcfe34
       created: 1763601631691
-      modified: 1763619438693
+      modified: 1765181034700
       isPrivate: false
       description: ""
       sortKey: -1760349593651.0938
@@ -473,8 +474,8 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDE3NmE0LTg1YzktNGYwMS05NjA5LTI1ZTI4N2RiMmRiNSIsIm1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50ZSIsImlhdCI6MTc2NTE4MTAxOSwiZXhwIjoxNzY1MTk1NDE5fQ.55cFeHYdWjHU6ehiE1eQktulx_zbJ8QDIq1b1pHIack
       prefix: Bearer
-      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkZmVjZGFhLTZhNjctNDZkNC05NTg0LTczZWU2OTZmYmQ5MiIsIm1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50ZSIsImlhdCI6MTc2MzYxMjA1NSwiZXhwIjoxNzYzNjI2NDU1fQ.nHD7Hgq_XmcdOEZR21thvvOvOvft9HvA0HhbX8sdveQ
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -486,9 +487,9 @@ collection:
   - url: http://localhost:3000/api/cart
     name: GET ACTIVE CART BY USER ID
     meta:
-      id: req_b7ec62165f554fa8aa2e0e66ddf62578
+      id: req_cbe336c80f144e11b7ee6a93e5c90977
       created: 1763609484214
-      modified: 1763612649938
+      modified: 1765176911713
       isPrivate: false
       description: ""
       sortKey: -1760327525023.0781
@@ -498,8 +499,8 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDE3NmE0LTg1YzktNGYwMS05NjA5LTI1ZTI4N2RiMmRiNSIsIm1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50ZSIsImlhdCI6MTc2NTE3NjkwNCwiZXhwIjoxNzY1MTkxMzA0fQ.zUt3T8YYGbtb0ufH7ToOwKga_t8NEaz9cymw0yA_So0
       prefix: Bearer
-      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFZmVjZGFhLTZhNjctNDZkNC05NTg0LTczZWU2OTZmYmQ5MiIsIm1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50ZSIsImlhdCI6MTc2MzYxMjUxNCwiZXhwIjoxNzYzNjI2OTE0fQ.6Jr67_qiVy2l86UfqWAmmr_LudNaZKByCG_RpP-bt0o
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -511,9 +512,9 @@ collection:
   - url: http://localhost:3000/api/cart/all
     name: GET ALL CARTS
     meta:
-      id: req_b6a05d1d95be40adb7e9e0420c764e1e
+      id: req_fef87ee6084c4682aa520f113c05eb74
       created: 1763610255547
-      modified: 1763619647026
+      modified: 1765178382040
       isPrivate: false
       description: ""
       sortKey: -1760316490709.0703
@@ -523,8 +524,8 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDE3NmE0LTg1YzktNGYwMS05NjA5LTI1ZTI4N2RiMmRiNSIsIm1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50ZSIsImlhdCI6MTc2NTE3NjkwNCwiZXhwIjoxNzY1MTkxMzA0fQ.zUt3T8YYGbtb0ufH7ToOwKga_t8NEaz9cymw0yA_So0
       prefix: Bearer
-      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkZmVjZGFhLTZhNjctNDZkNC05NTg0LTczZWU2OTZmYmQ5MiIsIm1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50ZSIsImlhdCI6MTc2MzYxOTYyNywiZXhwIjoxNzYzNjM0MDI3fQ.C-b9e_THukLDFUQd-WQvr_dIbVXU6x485njtDbj77xM
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -536,9 +537,9 @@ collection:
   - url: http://localhost:3000/api/cart
     name: ADD PRODUCTS TO CART
     meta:
-      id: req_8e62a9253df94c7fad8b03cd909bdc02
+      id: req_563d1af9bac74f10bb71f9d78b11b7d7
       created: 1763619470022
-      modified: 1763623591925
+      modified: 1765181167894
       isPrivate: false
       description: ""
       sortKey: -1760338559337.086
@@ -549,8 +550,8 @@ collection:
         {
          "products": [
         	 {
-        		 "id" : "4261706f-c0fa-442f-9a1a-df77dd3ea0a5",
-        		 "qty": 2
+        		 "id" : "b5337f8c-7846-45d2-a5c9-3dcdd74a44b9",
+        		 "qty": 1
         	 }
          ]
         }
@@ -561,8 +562,8 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDE3NmE0LTg1YzktNGYwMS05NjA5LTI1ZTI4N2RiMmRiNSIsIm1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50ZSIsImlhdCI6MTc2NTE4MTAxOSwiZXhwIjoxNzY1MTk1NDE5fQ.55cFeHYdWjHU6ehiE1eQktulx_zbJ8QDIq1b1pHIack
       prefix: Bearer
-      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkZmVjZGFhLTZhNjctNDZkNC05NTg0LTczZWU2OTZmYmQ5MiIsIm1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50ZSIsImlhdCI6MTc2MzYyMDEyOSwiZXhwIjoxNzYzNjM0NTI5fQ.N9rWMBf3fKzWmCJ-PSTUw_rzT9KmGg2zbCt9iNps1a4
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -574,7 +575,7 @@ collection:
   - url: http://localhost:3000/api/cart/products/4261706f-c0fa-442f-9a1a-df77dd3ea0a5
     name: UPDATE QTY PRODUCT IN CART
     meta:
-      id: req_cfcc91cf884c471a9705d7644c22b0a4
+      id: req_ab96dcd7f4734d66a84ba8deaf0ea4cd
       created: 1763621638556
       modified: 1763621862440
       isPrivate: false
@@ -594,8 +595,8 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
-      prefix: Bearer
       token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkZmVjZGFhLTZhNjctNDZkNC05NTg0LTczZWU2OTZmYmQ5MiIsIm1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50ZSIsImlhdCI6MTc2MzYyMTgzMCwiZXhwIjoxNzYzNjM2MjMwfQ._ak0fIX727ZnqgGyvCj6QgKnQocoRXtBgY8VFYleKFw
+      prefix: Bearer
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -604,12 +605,12 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:3000/api/cart/products/4261706f-c0fa-442f-9a1a-df77dd3ea0a5
+  - url: http://localhost:3000/api/cart/products/badc9a82-57ad-468c-9d3c-8fe0671545a0
     name: REMOVE PRODUCT IN CART
     meta:
-      id: req_ff4bb2b7c0ec4bd98c77dd092d2fc4c6
+      id: req_3d2d1f2cd58c4145940469b0463a3e7f
       created: 1763622576214
-      modified: 1763623007221
+      modified: 1765179050864
       isPrivate: false
       description: ""
       sortKey: -1760330283601.58
@@ -619,8 +620,8 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDE3NmE0LTg1YzktNGYwMS05NjA5LTI1ZTI4N2RiMmRiNSIsIm1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50ZSIsImlhdCI6MTc2NTE3NjkwNCwiZXhwIjoxNzY1MTkxMzA0fQ.zUt3T8YYGbtb0ufH7ToOwKga_t8NEaz9cymw0yA_So0
       prefix: Bearer
-      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkZmVjZGFhLTZhNjctNDZkNC05NTg0LTczZWU2OTZmYmQ5MiIsIm1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50ZSIsImlhdCI6MTc2MzYyMTgzMCwiZXhwIjoxNzYzNjM2MjMwfQ._ak0fIX727ZnqgGyvCj6QgKnQocoRXtBgY8VFYleKFw
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -632,7 +633,7 @@ collection:
   - url: http://localhost:3000/api/cart/clear
     name: CLEAR CART
     meta:
-      id: req_5d33fd60671a45368ef2a8294fa79ff1
+      id: req_5842bda7bdc94204a6323196b8be13bb
       created: 1763623558185
       modified: 1763623576888
       isPrivate: false
@@ -644,8 +645,33 @@ collection:
         value: insomnia/11.6.1
     authentication:
       type: bearer
-      prefix: Bearer
       token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkZmVjZGFhLTZhNjctNDZkNC05NTg0LTczZWU2OTZmYmQ5MiIsIm1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50ZSIsImlhdCI6MTc2MzYyMTgzMCwiZXhwIjoxNzYzNjM2MjMwfQ._ak0fIX727ZnqgGyvCj6QgKnQocoRXtBgY8VFYleKFw
+      prefix: Bearer
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/cart/pay
+    name: PAY CART
+    meta:
+      id: req_d927a5c44cfc45f4b43864f13ff59834
+      created: 1765176646677
+      modified: 1765181233235
+      isPrivate: false
+      description: ""
+      sortKey: -1760344076494.0898
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDE3NmE0LTg1YzktNGYwMS05NjA5LTI1ZTI4N2RiMmRiNSIsIm1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50ZSIsImlhdCI6MTc2NTE4MTAxOSwiZXhwIjoxNzY1MTk1NDE5fQ.55cFeHYdWjHU6ehiE1eQktulx_zbJ8QDIq1b1pHIack
+      prefix: Bearer
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -657,13 +683,13 @@ collection:
 cookieJar:
   name: Default Jar
   meta:
-    id: jar_76f6a5361f470ca3d79fb7ed5547da0de6767a75
+    id: jar_2e852e9a10324701a360983a8b3707f8
     created: 1761629574068
     modified: 1761629574068
 environments:
   name: Base Environment
   meta:
-    id: env_76f6a5361f470ca3d79fb7ed5547da0de6767a75
+    id: env_f1086d1b10794b538ed0393b9795b185
     created: 1761629574065
     modified: 1761629574065
     isPrivate: false
