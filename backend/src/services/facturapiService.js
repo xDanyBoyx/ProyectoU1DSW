@@ -1,7 +1,14 @@
 import { createRequire } from 'module';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const require = createRequire(import.meta.url);
 const Facturapi = require('facturapi').default;
+
+// Configuración de directorios para ESM (módulos modernos de Node)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // ============= SINGLETON PATTERN =============
 
@@ -217,6 +224,42 @@ export const createFacturapiInvoice = async (idCustomer, items) => {
 
     } catch (error) {
         console.error('❌ Error al crear factura en Facturapi: ', error.message);
+        return null;
+    }
+}
+
+export const downloadAndSaveInvoice = async (invoiceId) => {
+    const facturapi = facturapiService.getFacturapi();
+
+    // Definir carpeta de destino (ej: backend/public/invoices)
+    const invoicesDir = path.join(__dirname, '../../public/invoices');
+
+    // Crear carpeta si no existe
+    if (!fs.existsSync(invoicesDir)) {
+        fs.mkdirSync(invoicesDir, { recursive: true });
+    }
+
+    try {
+        // Descargar PDF
+        const pdfStream = await facturapi.invoices.downloadPdf(invoiceId);
+        const pdfFileName = `${invoiceId}.pdf`;
+        const pdfPath = path.join(invoicesDir, pdfFileName);
+        const pdfWrite = fs.createWriteStream(pdfPath);
+
+        // Pipe streams (guardado asíncrono)
+        pdfStream.pipe(pdfWrite);
+
+        // Esperar a que ambos archivos se terminen de escribir
+        await new Promise((resolve, reject) => {
+            pdfWrite.on('finish', resolve);
+            pdfWrite.on('error', reject);
+        });
+
+        // Retornar la ruta relativa para guardar en BD
+        return `/invoices/${pdfFileName}`;
+
+    } catch (error) {
+        console.error('❌ Error guardando archivos de factura:', error);
         return null;
     }
 }

@@ -2,7 +2,7 @@ import userModel from "../models/user.model.js";
 import productModel from "../models/product.model.js";
 import cartModel from "../models/cart.model.js";
 import { createPaymentIntent } from "../services/stripeService.js";
-import { createFacturapiInvoice } from "../services/facturapiService.js";
+import { createFacturapiInvoice, downloadAndSaveInvoice } from "../services/facturapiService.js";
 
 // METODO PARA CREAR UN NUEVO CARRITO CON INFORMACIÓN DEL USUARIO AUTENTICADO
 //DESCOMENTAR LA FUNCION CUANDO SE REQUIERA USAR LA AUTENTICACIÓN
@@ -373,7 +373,7 @@ const payCart = async (req, res) => {
             return res.status(404).json({ message: "No hay carrito pendiente de pago." });
         }
 
-        if (currentCart.products.length === 0){
+        if (currentCart.products.length === 0) {
             return res.status(400).json({ message: "El carrito está vacío." });
         }
 
@@ -417,26 +417,30 @@ const payCart = async (req, res) => {
         // generar factura con facturapi
         const factura = await createFacturapiInvoice(currentCart.user.id_facturapi, itemsForInvoice);
 
+        let pdfUrl = null;
+
+        if (factura) {
+            const savedFile = await downloadAndSaveInvoice(factura.id);
+            if (savedFile) {
+                pdfUrl = savedFile;
+            }
+        }
+
         // cerrar el carrito (Establecer paidAt)
         const updatedCart = await cartModel.updateCart(currentCart.id, {
             paidAt: new Date(),
             id_stripe: paymentIntent.id,
-            id_facturapi: factura ? factura.id : null
+            id_facturapi: factura ? factura.id : null,
+            invoice_pdf: pdfUrl,
         });
 
         const responseData = {
             message: "Pago realizado con éxito.",
             cart: updatedCart,
             paymentIntent,
-            facturaStatus: factura ? "created" : "failed"
+            facturaStatus: factura ? "created" : "failed",
+            facturaUrl: pdfUrl
         };
-
-        // if (invoice) {
-        //     // Opcional: Mandar la URL de descarga del PDF/XML al frontend
-        //     responseData.invoiceUrl = invoice.verification_url;
-        // } else {
-        //     responseData.warning = "El pago fue exitoso pero hubo un error generando la factura automática.";
-        // }
 
         return res.status(200).json(responseData);
 

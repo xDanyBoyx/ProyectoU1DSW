@@ -165,6 +165,8 @@ const updateCart = async (cartId, data) => {
         if (data.paidAt !== undefined) updatedData.paidAt = data.paidAt;
         if (data.id_facturapi !== undefined) updatedData.id_facturapi = data.id_facturapi;
         if (data.id_stripe !== undefined) updatedData.id_stripe = data.id_stripe;
+        if (data.invoice_pdf !== undefined) updatedData.invoice_pdf = data.invoice_pdf;
+
         // Verificar que hay campos para actualizar
         if (Object.keys(updatedData).length === 0) {
             return existingCart; // No hay cambios
@@ -174,6 +176,7 @@ const updateCart = async (cartId, data) => {
 
         return {
             id: cartId,
+            ...existingCart,
             ...updatedData
         };
     } catch (error) {
