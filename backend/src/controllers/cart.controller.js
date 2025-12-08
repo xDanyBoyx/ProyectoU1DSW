@@ -417,12 +417,13 @@ const payCart = async (req, res) => {
         // generar factura con facturapi
         const factura = await createFacturapiInvoice(currentCart.user.id_facturapi, itemsForInvoice);
 
-        let pdfUrl = null;
+        let invoicePaths = { pdfUrl: null, xmlUrl: null };
 
         if (factura) {
-            const savedFile = await downloadAndSaveInvoice(factura.id);
-            if (savedFile) {
-                pdfUrl = savedFile;
+            // generar PDF de la factura
+            const savedFiles = await downloadAndSaveInvoice(factura.id);
+            if (savedFiles) {
+                invoicePaths = savedFiles;
             }
         }
 
@@ -431,7 +432,9 @@ const payCart = async (req, res) => {
             paidAt: new Date(),
             id_stripe: paymentIntent.id,
             id_facturapi: factura ? factura.id : null,
-            invoice_pdf: pdfUrl,
+            // guardamos las rutas
+            invoice_pdf: invoicePaths.pdfUrl,
+            invoice_xml: invoicePaths.xmlUrl
         });
 
         const responseData = {
@@ -439,7 +442,8 @@ const payCart = async (req, res) => {
             cart: updatedCart,
             paymentIntent,
             facturaStatus: factura ? "created" : "failed",
-            facturaUrl: pdfUrl
+            invoice_pdf: invoicePaths.pdfUrl,
+            invoice_xml: invoicePaths.xmlUrl
         };
 
         return res.status(200).json(responseData);

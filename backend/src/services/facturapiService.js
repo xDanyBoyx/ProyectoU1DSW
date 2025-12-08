@@ -246,17 +246,34 @@ export const downloadAndSaveInvoice = async (invoiceId) => {
         const pdfPath = path.join(invoicesDir, pdfFileName);
         const pdfWrite = fs.createWriteStream(pdfPath);
 
+        // Descargar XML
+        const xmlStream = await facturapi.invoices.downloadXml(invoiceId);
+        const xmlFileName = `${invoiceId}.xml`;
+        const xmlPath = path.join(invoicesDir, xmlFileName);
+        const xmlWrite = fs.createWriteStream(xmlPath);
+
         // Pipe streams (guardado asíncrono)
         pdfStream.pipe(pdfWrite);
+        xmlStream.pipe(xmlWrite);
 
         // Esperar a que ambos archivos se terminen de escribir
         await new Promise((resolve, reject) => {
-            pdfWrite.on('finish', resolve);
+            let finished = 0;
+            const checkFinished = () => {
+                finished++;
+                if (finished === 2) resolve();
+            };
+            pdfWrite.on('finish', checkFinished);
+            xmlWrite.on('finish', checkFinished);
             pdfWrite.on('error', reject);
+            xmlWrite.on('error', reject);
         });
 
         // Retornar la ruta relativa para guardar en BD
-        return `/invoices/${pdfFileName}`;
+        return {
+            pdfUrl: `/invoices/${pdfFileName}`,
+            xmlUrl: `/invoices/${xmlFileName}`
+        };
 
     } catch (error) {
         console.error('❌ Error guardando archivos de factura:', error);

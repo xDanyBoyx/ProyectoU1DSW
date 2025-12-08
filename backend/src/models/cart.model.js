@@ -166,6 +166,7 @@ const updateCart = async (cartId, data) => {
         if (data.id_facturapi !== undefined) updatedData.id_facturapi = data.id_facturapi;
         if (data.id_stripe !== undefined) updatedData.id_stripe = data.id_stripe;
         if (data.invoice_pdf !== undefined) updatedData.invoice_pdf = data.invoice_pdf;
+        if (data.invoice_xml !== undefined) updatedData.invoice_xml = data.invoice_xml;
 
         // Verificar que hay campos para actualizar
         if (Object.keys(updatedData).length === 0) {
