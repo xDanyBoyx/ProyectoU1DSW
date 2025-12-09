@@ -4,6 +4,8 @@ import cartModel from "../models/cart.model.js";
 import { createPaymentIntent } from "../services/stripeService.js";
 import { createFacturapiInvoice, downloadAndSaveInvoice } from "../services/facturapiService.js";
 import { sendOrderConfirmation } from "../services/sendgridService.js";
+import { generateOrderSMS } from "../services/aiGoogleService.js";
+import { sendConfirmationOrderSMS } from "../services/twilioService.js";
 
 // METODO PARA CREAR UN NUEVO CARRITO CON INFORMACIÓN DEL USUARIO AUTENTICADO
 //DESCOMENTAR LA FUNCION CUANDO SE REQUIERA USAR LA AUTENTICACIÓN
@@ -448,7 +450,24 @@ const payCart = async (req, res) => {
         // enviar correo de confirmación con twilio con archivos de factura adjuntos
         sendOrderConfirmation(userMail, updatedCart, invoicePaths, itemsForEmail);
 
-        
+        // -------------------------------------------------------
+        // BLOQUE DE SMS CON IA
+        // -------------------------------------------------------
+        // Lo ejecutamos sin 'await' principal para no hacer esperar al cliente en el response
+        (async () => {
+            try {
+                // Generar el texto con la librería de IA de Google
+                const smsText = await generateOrderSMS(updatedCart);
+                
+                // Enviar el SMS si el usuario tiene teléfono
+                if (currentCart.user.phone) {
+                    await sendConfirmationOrderSMS(currentCart.user.phone, smsText);
+                }
+            } catch (err) {
+                console.error("❌ Error en proceso SMS post-pago:", err);
+            }
+        })();
+        // -------------------------------------------------------
 
         const responseData = {
             message: "Pago realizado con éxito.",
