@@ -1,3 +1,6 @@
+# carpeta en el backend donde se guardan los archivos de facturas generadas
+backend/public/invoices
+
 package-lock.json
 
 # Dependencias
