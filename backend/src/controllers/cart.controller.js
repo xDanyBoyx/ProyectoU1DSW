@@ -3,6 +3,7 @@ import productModel from "../models/product.model.js";
 import cartModel from "../models/cart.model.js";
 import { createPaymentIntent } from "../services/stripeService.js";
 import { createFacturapiInvoice, downloadAndSaveInvoice } from "../services/facturapiService.js";
+import { sendOrderConfirmation } from "../services/sendgridService.js";
 
 // METODO PARA CREAR UN NUEVO CARRITO CON INFORMACIÓN DEL USUARIO AUTENTICADO
 //DESCOMENTAR LA FUNCION CUANDO SE REQUIERA USAR LA AUTENTICACIÓN
@@ -378,6 +379,7 @@ const payCart = async (req, res) => {
         }
 
         const itemsForInvoice = [];
+        const itemsForEmail = [];
 
         for (const item of currentCart.products) {
             const product = await productModel.findById(item.product.id);
@@ -392,6 +394,12 @@ const payCart = async (req, res) => {
                     message: `El producto ${product.name} no está configurado para facturación.`
                 });
             }
+
+            itemsForEmail.push({
+                infoProductBD: product,
+                subtotal: item.subtotal,
+                qty: item.qty
+            });
 
             // Preparamos el item para la factura
             itemsForInvoice.push({
@@ -420,7 +428,7 @@ const payCart = async (req, res) => {
         let invoicePaths = { pdfUrl: null, xmlUrl: null };
 
         if (factura) {
-            // generar PDF de la factura
+            // generar PDF y XML de la factura
             const savedFiles = await downloadAndSaveInvoice(factura.id);
             if (savedFiles) {
                 invoicePaths = savedFiles;
@@ -436,6 +444,9 @@ const payCart = async (req, res) => {
             invoice_pdf: invoicePaths.pdfUrl,
             invoice_xml: invoicePaths.xmlUrl
         });
+
+        // enviar correo de confirmación
+        sendOrderConfirmation(userMail, updatedCart, invoicePaths, itemsForEmail);
 
         const responseData = {
             message: "Pago realizado con éxito.",

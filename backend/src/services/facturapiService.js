@@ -280,3 +280,14 @@ export const downloadAndSaveInvoice = async (invoiceId) => {
         return null;
     }
 }
+
+export const getProductInfoFacturapi = async (productId) => {
+    const facturapi = facturapiService.getFacturapi();
+    try {
+        const product = await facturapi.products.retrieve(productId);
+        return product;
+    } catch (error) {
+        console.error('❌ Error al obtener información del producto en Facturapi: ', error);
+        return error;
+    }
+}
