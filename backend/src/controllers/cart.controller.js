@@ -457,7 +457,7 @@ const payCart = async (req, res) => {
         (async () => {
             try {
                 // Generar el texto con la librería de IA de Google
-                const smsText = await generateOrderSMS(updatedCart);
+                const smsText = await generateOrderSMS(updatedCart, itemsForEmail);
                 
                 // Enviar el SMS si el usuario tiene teléfono
                 if (currentCart.user.phone) {
