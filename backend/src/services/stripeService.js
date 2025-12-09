@@ -14,6 +14,7 @@ export const createPaymentIntent = async (idCustomer, idCart, total) => {
                 idCustomer: idCustomer.toString(),
             },
         });
+        console.log("🆗 Se generó con exito el intento de pago con Stripe.");
         return paymentIntent;
     } catch (error) {
         console.error('❌ Error al procesar pago con Stripe: ', error);
