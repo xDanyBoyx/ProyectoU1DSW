@@ -20,7 +20,8 @@
     "facturapi": "4.10.0",
     "firebase": "12.4.0",
     "jsonwebtoken": "9.0.2",
-    "stripe": "20.0.0"
+    "stripe": "20.0.0",
+    "twilio": "5.10.7"
   },
   "devDependencies": {
     "nodemon": "3.1.10"

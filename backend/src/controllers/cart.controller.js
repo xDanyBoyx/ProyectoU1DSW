@@ -445,8 +445,10 @@ const payCart = async (req, res) => {
             invoice_xml: invoicePaths.xmlUrl
         });
 
-        // enviar correo de confirmación
+        // enviar correo de confirmación con twilio con archivos de factura adjuntos
         sendOrderConfirmation(userMail, updatedCart, invoicePaths, itemsForEmail);
+
+        
 
         const responseData = {
             message: "Pago realizado con éxito.",
