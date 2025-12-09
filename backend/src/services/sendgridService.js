@@ -1,41 +1,45 @@
 import sgMail from "@sendgrid/mail";
-import fs from "fs"; // <--- IMPORTANTE: Necesario para leer los archivos
-import path from "path"; // Para obtener el nombre del archivo limpio
+import fs from "fs"; 
+import path from "path"; 
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-// Ahora recibimos invoicePaths en lugar de invoiceUrl
-export const sendOrderConfirmation = async (userEmail, cart, invoicePaths = { pdfUrl: null, xmlUrl: null }, itemsForEmail) => {
+export const sendOrderConfirmation = async (
+    userEmail,
+    cart,
+    invoicePaths = { pdfLocalPath: null, xmlLocalPath: null },
+    itemsForEmail
+) => { 
 
     // 1. Construimos el HTML (Le pasamos invoicePaths para saber si mostrar el aviso de adjuntos)
     const emailContent = buildEmailContent(cart, invoicePaths, itemsForEmail);
 
     const textSummary = `Hola ${cart.user.name}, gracias por tu compra. \n\n` +
-                        `Tu pedido #${cart.id} ha sido confirmado.\n` +
-                        `Total pagado: $${cart.total}\n\n` +
-                        `Hemos adjuntado tu factura a este correo.`;
+        `Tu pedido #${cart.id} ha sido confirmado.\n` +
+        `Total pagado: $${cart.total}\n\n` +
+        `Hemos adjuntado tu factura a este correo.`;
 
     // 2. Preparamos los adjuntos
     const attachments = [];
 
     try {
         // Adjuntar PDF si existe
-        if (invoicePaths.pdfUrl && fs.existsSync(invoicePaths.pdfUrl)) {
-            const pdfContent = fs.readFileSync(invoicePaths.pdfUrl).toString("base64");
+        if (invoicePaths.pdfLocalPath && fs.existsSync(invoicePaths.pdfLocalPath)) {
+            const pdfContent = fs.readFileSync(invoicePaths.pdfLocalPath).toString("base64");
             attachments.push({
                 content: pdfContent,
-                filename: path.basename(invoicePaths.pdfUrl), // Ej: "factura_123.pdf"
+                filename: path.basename(invoicePaths.pdfLocalPath),
                 type: "application/pdf",
                 disposition: "attachment"
             });
         }
 
         // Adjuntar XML si existe
-        if (invoicePaths.xmlUrl && fs.existsSync(invoicePaths.xmlUrl)) {
-            const xmlContent = fs.readFileSync(invoicePaths.xmlUrl).toString("base64");
+        if (invoicePaths.xmlLocalPath && fs.existsSync(invoicePaths.xmlLocalPath)) {
+            const xmlContent = fs.readFileSync(invoicePaths.xmlLocalPath).toString("base64");
             attachments.push({
                 content: xmlContent,
-                filename: path.basename(invoicePaths.xmlUrl), // Ej: "factura_123.xml"
+                filename: path.basename(invoicePaths.xmlLocalPath),
                 type: "application/xml",
                 disposition: "attachment"
             });

@@ -269,10 +269,12 @@ export const downloadAndSaveInvoice = async (invoiceId) => {
             xmlWrite.on('error', reject);
         });
 
-        // Retornar la ruta relativa para guardar en BD
+        // Retornar la ruta relativa para guardar en BD y rutas absolutas para adjuntar archivos en mail
         return {
             pdfUrl: `/invoices/${pdfFileName}`,
-            xmlUrl: `/invoices/${xmlFileName}`
+            xmlUrl: `/invoices/${xmlFileName}`,
+            pdfLocalPath: pdfPath,
+            xmlLocalPath: xmlPath
         };
 
     } catch (error) {
