@@ -20,3 +20,13 @@ export function authenticate(req, res, next) {
     return res.status(401).json({ message: "Token inválido o expirado" });
   }
 }
+
+export function authorize(allowedRoles) {
+  return (req, res, next) => {
+    // Verificamos si el rol del usuario está incluido en los roles permitidos
+    if (!req.userRole || !allowedRoles.includes(req.userRole)) {
+      return res.status(403).json({ message: "Acceso denegado: No tienes permisos para realizar esta acción." });
+    }
+    next();
+  };
+}
