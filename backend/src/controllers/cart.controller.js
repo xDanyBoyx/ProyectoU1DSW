@@ -175,7 +175,7 @@ const getCurrentCart = async (req, res) => {
         }
         const cart = await cartModel.getCurrentCart(userId);
 
-        return res.status(201).json(cart);
+        return res.status(200).json(cart);
 
     } catch (error) {
         return res.status(500).json({ message: error.message });
